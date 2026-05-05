@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Présentation Veragrow pour Veragro — support de réunion : produit, technique, périmètres et passation.">
+    <meta name="theme-color" content="#065f46">
+    <title>Veragrow — Présentation pour Veragro</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            DEFAULT: '#065f46',
+                            dark: '#064e3b',
+                            light: '#047857',
+                            muted: '#d1fae5',
+                        },
+                        ink: '#1e293b',
+                    },
+                    transitionTimingFunction: {
+                        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                        'out-soft': 'cubic-bezier(0.33, 1, 0.68, 1)',
+                    },
+                    keyframes: {
+                        meshFade: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '0.06' },
+                        },
+                        orbDrift: {
+                            '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
+                            '50%': { transform: 'translate(2%, -1%) scale(1.03)' },
+                        },
+                    },
+                    animation: {
+                        'mesh-fade': 'meshFade 2.2s ease-out forwards',
+                        'orb-drift': 'orbDrift 18s ease-in-out infinite',
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        :root {
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --reveal-duration: 0.85s;
+        }
+        html { scroll-padding-top: 6.5rem; }
+        body {
+            font-feature-settings: "cv02", "cv03", "ss01";
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        ::selection {
+            background-color: rgb(6 95 70 / 0.18);
+            color: inherit;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+            .reveal-on-scroll,
+            .hero-animate-in {
+                opacity: 1 !important;
+                transform: none !important;
+                filter: none !important;
+                animation: none !important;
+            }
+            #boot-curtain { display: none !important; }
+        }
+        /* Entrée page */
+        #boot-curtain {
+            pointer-events: auto;
+            transition: opacity 0.7s var(--ease-out-expo), visibility 0.7s step-end;
+        }
+        #boot-curtain.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        /* Révélation sections */
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(1.35rem);
+            filter: blur(5px);
+            transition:
+                opacity var(--reveal-duration) var(--ease-out-expo),
+                transform var(--reveal-duration) var(--ease-out-expo),
+                filter 0.55s var(--ease-out-expo);
+            will-change: opacity, transform, filter;
+        }
+        .reveal-on-scroll.reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+            will-change: auto;
+        }
+        /* Héro : cascade au chargement */
+        @keyframes heroFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(1.15rem);
+                filter: blur(6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+        .hero-animate-in {
+            opacity: 0;
+            animation: heroFadeUp 0.78s var(--ease-out-expo) forwards;
+            animation-play-state: paused;
+        }
+        body.is-ready .hero-animate-in {
+            animation-play-state: running;
+        }
+        /* Navigation */
+        #site-header {
+            transition: box-shadow 0.35s var(--ease-out-expo), background-color 0.35s ease, border-color 0.35s ease;
+        }
+        #site-header.is-scrolled {
+            box-shadow: 0 1px 0 rgb(15 23 42 / 0.06), 0 12px 40px -16px rgb(15 23 42 / 0.12);
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.25s ease, background-color 0.25s ease;
+        }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0.75rem;
+            right: 0.75rem;
+            bottom: 0.35rem;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #065f46, #047857);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s var(--ease-out-expo);
+        }
+        .nav-link:hover::after,
+        .nav-link:focus-visible::after {
+            transform: scaleX(1);
+        }
+        /* Progression lecture */
+        #scroll-progress-bar {
+            transition: width 0.15s var(--ease-out-expo);
+            background: linear-gradient(90deg, #064e3b, #065f46, #047857);
+            box-shadow: 0 0 12px rgb(6 95 70 / 0.35);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #scroll-progress-bar { transition: none; box-shadow: none; }
+        }
+        /* Cartes & pricing */
+        .pricing-card {
+            will-change: transform;
+        }
+        .pricing-card:active {
+            transform: translateY(-0.25rem) scale(0.995);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .pricing-card:active { transform: none; }
+        }
+        /* Focus clavier */
+        a:focus-visible,
+        summary:focus-visible {
+            outline: 2px solid #065f46;
+            outline-offset: 2px;
+        }
+        /* Détail mockup barres */
+        @keyframes mockGrow {
+            from { transform: scaleY(0.45); opacity: 0.35; }
+            to { transform: scaleY(1); opacity: 1; }
+        }
+        .mock-bar {
+            transform-origin: bottom center;
+            animation: mockGrow 1s var(--ease-out-expo) forwards;
+            animation-play-state: paused;
+        }
+        body.is-ready .mock-bar {
+            animation-play-state: running;
+        }
+        .mock-bar:nth-child(1) { animation-delay: 0.35s; }
+        .mock-bar:nth-child(2) { animation-delay: 0.42s; }
+        .mock-bar:nth-child(3) { animation-delay: 0.49s; }
+        .mock-bar:nth-child(4) { animation-delay: 0.56s; }
+        .mock-bar:nth-child(5) { animation-delay: 0.63s; }
+        .mock-bar:nth-child(6) { animation-delay: 0.7s; }
+        @media (prefers-reduced-motion: reduce) {
+            .mock-bar { animation: none !important; opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body class="bg-white text-slate-800 antialiased font-sans text-[15px] leading-relaxed">
+    <div id="boot-curtain" class="fixed inset-0 z-[150] bg-white" aria-hidden="true"></div>
+
+    <!-- Bannière exclusivité + barre de progression -->
+    <div class="fixed inset-x-0 top-0 z-[100]">
+        <div class="bg-ink text-center px-3 py-2 text-[11px] sm:text-xs font-medium text-white/95 border-b border-white/10">
+            <span class="text-slate-400">Support de présentation · </span>
+            Réservé à l’<span class="text-emerald-300 font-semibold">équipe Veragro</span> lors du rendez-vous
+            <span class="text-white/50 hidden sm:inline"> · </span>
+            <span class="text-slate-400 hidden sm:inline">non destiné à diffusion publique</span>
+        </div>
+        <div class="h-[3px] w-full bg-slate-200/90" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="scroll-progress-track">
+            <div id="scroll-progress-bar" class="h-full w-0 rounded-r-full"></div>
+        </div>
+    </div>
+
+    <header id="site-header" class="fixed inset-x-0 top-[3.5rem] sm:top-[3.25rem] z-50 border-b border-slate-200/90 bg-white/90 backdrop-blur-xl backdrop-saturate-150 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="flex h-14 sm:h-16 items-center justify-between gap-3">
+                <a href="#" class="flex items-center gap-2.5 min-w-0">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
+                        <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                    </span>
+                    <div class="min-w-0 leading-tight">
+                        <span class="block text-sm font-semibold tracking-tight text-ink truncate">Veragrow</span>
+                        <span class="block text-[10px] font-medium uppercase tracking-wider text-slate-500 truncate">Présentation · Veragro</span>
+                    </div>
+                </a>
+                <nav class="hidden md:flex items-center gap-0.5">
+                    <a href="#probleme" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Enjeu</a>
+                    <a href="#solution" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Solution</a>
+                    <a href="#produit" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Produit</a>
+                    <a href="#compare" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Interne / actif</a>
+                    <a href="#apis" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">APIs</a>
+                    <a href="#stack" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Stack</a>
+                    <a href="#qualite" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Qualité</a>
+                </nav>
+                <a href="#probleme" class="hidden sm:inline-flex items-center rounded-xl border border-slate-200/90 bg-white px-4 py-2 text-sm font-medium text-ink shadow-sm hover:border-slate-300 hover:bg-slate-50/90 transition-all duration-300 ease-out">Plan de la présentation</a>
+                <details class="relative md:hidden">
+                    <summary class="list-none cursor-pointer rounded-xl border border-slate-200 bg-white p-2 text-ink shadow-sm [&::-webkit-details-marker]:hidden" aria-label="Menu">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </summary>
+                    <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white py-1 shadow-sm z-50">
+                        <a href="#probleme" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Enjeu</a>
+                        <a href="#solution" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Solution</a>
+                        <a href="#produit" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Produit</a>
+                        <a href="#compare" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Interne / actif</a>
+                        <a href="#apis" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">APIs</a>
+                        <a href="#stack" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Stack</a>
+                        <a href="#qualite" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Qualité</a>
+                    </div>
+                </details>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="relative bg-gradient-to-b from-ink via-[#152238] to-brand-dark pt-[8.25rem] sm:pt-[8rem] pb-16 sm:pb-24 overflow-hidden">
+        <div class="pointer-events-none absolute -left-32 top-24 h-[420px] w-[420px] rounded-full bg-emerald-500/20 blur-[100px] motion-safe:animate-orb-drift" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute -right-24 bottom-0 h-[360px] w-[360px] rounded-full bg-cyan-500/10 blur-[90px] motion-safe:animate-orb-drift" style="animation-delay: -9s" aria-hidden="true"></div>
+        <div class="absolute inset-0 motion-safe:animate-mesh-fade opacity-0" style="background-image: linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 40px 40px;" aria-hidden="true"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-ink/40 pointer-events-none" aria-hidden="true"></div>
+        <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="max-w-2xl">
+                <p class="hero-animate-in text-[11px] font-semibold uppercase tracking-widest text-emerald-300/90 mb-4" style="animation-delay: 0.08s">Document de travail · réunion privée</p>
+                <h1 class="hero-animate-in text-3xl sm:text-4xl lg:text-[2.65rem] font-bold tracking-tight text-white leading-[1.15]" style="animation-delay: 0.16s">
+                    Veragrow : ce que nous vous présentons aujourd’hui
+                </h1>
+                <p class="hero-animate-in mt-6 text-base sm:text-lg text-slate-300 leading-relaxed font-medium" style="animation-delay: 0.26s">
+                    Ce support présente, de façon structurée, <strong class="text-white font-semibold">l’application</strong>, son architecture et les choix techniques.
+                </p>
+                <p class="hero-animate-in mt-4 text-sm text-slate-400 leading-relaxed max-w-xl" style="animation-delay: 0.34s">
+                    Contexte : aujourd’hui, les exploitants jonglent souvent entre Isagri, Spotifarm, Mileos et des sources météo ou boursières dispersées.
+                </p>
+                <div class="hero-animate-in mt-8 flex flex-wrap gap-3" style="animation-delay: 0.42s">
+                    <a href="#produit" class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-semibold text-brand shadow-md shadow-black/10 hover:bg-brand-muted hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-out">Aperçu interface</a>
+                    <a href="#solution" class="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/[0.07] px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/12 hover:border-white/30 hover:-translate-y-0.5 transition-all duration-300 ease-out">Suite du document</a>
+                </div>
+            </div>
+
+            <!-- Bento mockup : faux dashboard -->
+            <div id="produit" class="reveal-on-scroll mt-14 lg:mt-16 scroll-mt-28">
+                <p class="text-xs font-semibold uppercase tracking-wider text-emerald-300/80 mb-3">Aperçu produit (mockup)</p>
+                <div class="rounded-xl border border-white/15 bg-white/[0.07] p-3 sm:p-4 shadow-lg shadow-black/20 backdrop-blur-md transition-shadow duration-500 ease-out hover:border-white/25 hover:shadow-xl hover:shadow-black/25">
+                    <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3 mb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+                            <span class="text-xs font-semibold text-white tracking-tight">Veragrow — Pilotage exploitation</span>
+                        </div>
+                        <div class="flex gap-1.5">
+                            <span class="rounded-lg bg-white/10 px-2 py-1 text-[10px] font-medium text-emerald-200">Live</span>
+                            <span class="rounded-lg bg-white/10 px-2 py-1 text-[10px] text-slate-300">Euronext</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-12 gap-2 sm:gap-3">
+                        <!-- Carte large : mini carte -->
+                        <div class="col-span-12 md:col-span-7 rounded-xl bg-gradient-to-br from-slate-100 to-emerald-50 p-4 border border-slate-200/80 shadow-sm min-h-[140px] relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-40 bg-gradient-to-tr from-brand/20 to-transparent"></div>
+                            <div class="relative flex justify-between items-start">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wide text-slate-500">Parcelles · RPG</p>
+                                    <p class="text-sm font-bold tracking-tight text-ink mt-1">Vue synthétique</p>
+                                </div>
+                                <svg class="h-8 w-8 text-brand/40" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+                            </div>
+                            <div class="relative mt-4 flex gap-1 h-16 items-end">
+                                <div class="mock-bar flex-1 rounded-t bg-brand/30 h-[40%]"></div>
+                                <div class="mock-bar flex-1 rounded-t bg-brand/50 h-[65%]"></div>
+                                <div class="mock-bar flex-1 rounded-t bg-brand h-[85%]"></div>
+                                <div class="mock-bar flex-1 rounded-t bg-brand/45 h-[55%]"></div>
+                                <div class="mock-bar flex-1 rounded-t bg-brand/35 h-[48%]"></div>
+                                <div class="mock-bar flex-1 rounded-t bg-emerald-400/60 h-[72%]"></div>
+                            </div>
+                            <p class="relative mt-2 text-[10px] text-slate-600 font-medium">NDVI simplifié — complexité moteur, lecture terrain immédiate</p>
+                        </div>
+                        <!-- Colonne droite : widgets -->
+                        <div class="col-span-12 md:col-span-5 grid grid-cols-2 gap-2 sm:gap-3">
+                            <div class="rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold uppercase text-slate-500 tracking-wide">Blé</span>
+                                    <svg class="h-4 w-4 text-brand" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                </div>
+                                <p class="text-lg font-bold tracking-tight text-ink mt-1 tabular-nums">242,50</p>
+                                <p class="text-[10px] text-emerald-700 font-semibold mt-0.5">+0,6 % · MATIF</p>
+                            </div>
+                            <div class="rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold uppercase text-slate-500 tracking-wide">Alerte</span>
+                                    <svg class="h-4 w-4 text-amber-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                                </div>
+                                <p class="text-xs font-semibold text-ink tracking-tight mt-1 leading-snug">Indication sécheresse</p>
+                                <p class="text-[10px] text-slate-500 mt-1">Aide à la décision</p>
+                            </div>
+                            <div class="col-span-2 rounded-xl bg-gradient-to-r from-slate-800 to-ink p-3 border border-slate-600 shadow-sm flex items-center justify-between gap-2">
+                                <div>
+                                    <p class="text-[10px] font-bold uppercase tracking-wide text-emerald-300/90">Météo agronomique</p>
+                                    <p class="text-sm font-bold text-white tracking-tight mt-0.5">ETP · cumuls</p>
+                                </div>
+                                <svg class="h-9 w-9 text-white/25 shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/></svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="border-b border-slate-200/90 bg-gradient-to-b from-slate-50 to-white reveal-on-scroll">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5">
+            <p class="text-center text-xs sm:text-sm font-medium text-slate-600 tracking-tight">
+                <span class="text-ink font-semibold">Objet de la présentation</span> — vision claire du produit, des données et du technique.
+            </p>
+        </div>
+    </div>
+
+    <!-- 1. Problème -->
+    <section id="probleme" class="py-16 sm:py-22 bg-white scroll-mt-32 reveal-on-scroll">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="lg:grid lg:grid-cols-12 lg:gap-14">
+                <div class="lg:col-span-4">
+                    <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">01 · Enjeu métier</p>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight">Fragmentation des outils = friction sur les flux opérationnels</h2>
+                </div>
+                <div class="lg:col-span-8 mt-8 lg:mt-0 space-y-5 text-slate-600">
+                    <p>Les exploitants et vos équipes terrain perdent une capacité précieuse à arbitrer : ils basculent entre <strong class="text-ink">Isagri</strong> (gestion globale), <strong class="text-ink">Spotifarm</strong> (satellite), <strong class="text-ink">Mileos</strong> (mildiou), puis des portails météo et boursiers non intégrés.</p>
+                    <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
+                        <p class="text-sm sm:text-base text-slate-700"><strong class="text-ink">Conséquence business :</strong> délais de décision allongés, données non réconciliées, coût caché de formation et de maintenance multi-fournisseurs — sans parler de l’usure cognitive des interfaces hétérogènes.</p>
+                    </div>
+                    <div class="rounded-xl border border-emerald-200 bg-brand-muted/50 p-6 shadow-sm">
+                        <p class="text-sm font-semibold text-brand-dark uppercase tracking-wide mb-2">Exigence cible</p>
+                        <p class="text-slate-800 m-0">Une plateforme unique, sobre et rapide, qui <strong>optimise les flux opérationnels</strong> (météo, marchés, parcelles, alertes) avec une UX moderne — et qui reste <strong>sous contrôle Veragro</strong> une fois le code cédé.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. Solution -->
+    <section id="solution" class="py-16 sm:py-22 bg-slate-50 border-y border-slate-200 reveal-on-scroll scroll-mt-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">02 · Solution</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink max-w-3xl leading-tight">Veragrow : actif logiciel prêt à industrialiser</h2>
+            <p class="mt-6 text-base sm:text-lg text-slate-600 max-w-3xl leading-relaxed">
+                Veragrow agrège <strong class="text-ink">cartographie</strong>, <strong class="text-ink">IA d’assistance</strong> et <strong class="text-ink">visualisation décisionnelle</strong>.
+            </p>
+            <div class="mt-10 grid sm:grid-cols-3 gap-4">
+                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Souveraineté</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Cession du code : hébergement, évolutions et sécurité, sans dépendance opaque à un prestataire.</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Time-to-value</p>
+                    <p class="text-sm text-slate-600 leading-relaxed">Actif déjà structuré : compression du calendrier vs. un build interne récurrent à 12 mois et au-delà.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fonctions (contenu métier conservé, libellés B2B) -->
+    <section class="py-16 sm:py-22 bg-white reveal-on-scroll">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">03 · Fonctionnalités</p>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <div class="text-3xl sm:text-4xl font-extrabold tracking-tight text-ink leading-none">FONCTIONS</div>
+                    <h2 class="mt-2 text-lg sm:text-xl font-semibold tracking-tight text-slate-700">Ce que fait l’app (fonctionnalités principales)</h2>
+                </div>
+            </div>
+
+            <div class="mt-10 space-y-4">
+                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">1</span>
+                        <h3 class="text-base font-bold tracking-tight text-ink">Météo précise</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
+                        <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Livrable</span><p class="mt-1 m-0">Ultra-local (parcelle) et régional (~30 km).</p></div>
+                        <div class="rounded-xl bg-slate-50 border border-slate-100 p-4"><span class="text-xs font-bold text-brand uppercase tracking-wide">Veragrow</span><p class="mt-1 m-0">Filtres semaine / mois, moyennes pluie &amp; températures — pilotage semis &amp; traitements.</p></div>
+                    </div>
+                </article>
+                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">2</span>
+                        <h3 class="text-base font-bold tracking-tight text-ink">Moteur d’alertes IA</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
+                        <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Livrable</span><p class="mt-1 m-0">Détection de risques et recommandations de traitement.</p></div>
+                        <div class="rounded-xl bg-slate-50 border border-slate-100 p-4"><span class="text-xs font-bold text-brand uppercase tracking-wide">Veragrow</span><p class="mt-1 m-0">Recherche web temps réel si la réponse dépasse le périmètre du modèle.</p></div>
+                    </div>
+                    <p class="mt-4 text-xs sm:text-sm text-amber-900 bg-amber-50 border border-amber-100 rounded-xl px-4 py-3 m-0"><strong>Juridique :</strong> formulations en « indications d’aide à la décision » et clause de renonciation aux poursuites — <strong class="text-ink">cadre défendable pour Veragro</strong>.</p>
+                </article>
+                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">3</span>
+                        <h3 class="text-base font-bold tracking-tight text-ink">Cours des céréales</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-4 text-sm text-slate-600">
+                        <div><span class="text-xs font-bold text-slate-400 uppercase tracking-wide">Livrable</span><p class="mt-1 m-0">Prix Euronext (blé, maïs, colza).</p></div>
+                        <div class="rounded-xl bg-slate-50 border border-slate-100 p-4"><span class="text-xs font-bold text-brand uppercase tracking-wide">Veragrow</span><p class="mt-1 m-0">Historique graphique, filtres avancés pour caler la commercialisation.</p></div>
+                    </div>
+                </article>
+                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-2 mb-3">
+                        <span class="rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">4–6</span>
+                        <h3 class="text-base font-bold tracking-tight text-ink">Tokens, profil &amp; dashboard modulable, parcelles RPG</h3>
+                    </div>
+                    <p class="text-sm text-slate-600 m-0">Fidélisation par points, widgets réorganisables selon les priorités opérationnelles, sélection auto des parcelles et <strong class="text-ink">comparaison inter-saison</strong> de la dynamique de végétation.</p>
+                </article>
+                <article class="rounded-xl border-2 border-brand/30 bg-gradient-to-br from-ink to-brand-dark p-5 sm:p-6 shadow-sm">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <span class="rounded-lg bg-white/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-200">7 · Option étendue</span>
+                        <h3 class="text-base font-bold tracking-tight text-white">Vue 3D de la ferme</h3>
+                    </div>
+                    <p class="text-sm text-slate-300 m-0">Relief exploitation &amp; bâtiments — utile pour les démos et le repérage spatial. Prévue dans le <strong class="text-white">périmètre le plus large</strong> présenté plus bas ; nous pourrons en discuter en direct selon vos priorités.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Make vs Buy -->
+    <section id="compare" class="py-16 sm:py-22 bg-white border-t border-slate-200 reveal-on-scroll scroll-mt-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <div class="max-w-2xl">
+                <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">04 · Cadre de discussion</p>
+                <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight">Construire en interne ou reprendre un actif existant</h2>
+                <p class="mt-4 text-slate-600 text-sm sm:text-base">Ce tableau ne vise pas à « trancher » pendant la réunion : il sert de <strong class="text-ink">support de dialogue</strong> avec votre DSI sur les risques projet, la maintenance et la souveraineté — pour éclairer votre décision, quelle qu’elle soit.</p>
+            </div>
+            <div class="mt-10 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[640px] text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-slate-200 bg-slate-50">
+                                <th class="px-4 py-3 font-semibold text-slate-500 uppercase text-[10px] tracking-wider w-[28%]">Critère</th>
+                                <th class="px-4 py-3 font-semibold text-ink">Développement interne (12 mois +)</th>
+                                <th class="px-4 py-3 font-semibold text-brand">Reprise de l’actif Veragrow</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-600">
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink">Délai &amp; ROI</td>
+                                <td class="px-4 py-3">Cycle long : premier ROI souvent au-delà de trois trimestres, aléas de cadrage.</td>
+                                <td class="px-4 py-3 font-medium text-brand-dark bg-emerald-50/50">Time-to-value immédiat : actif déjà composé, priorisation roadmap Veragro.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink">Coûts de maintenance</td>
+                                <td class="px-4 py-3">Code jeune = tickets correctifs élevés les premiers mois ; documentation inégale.</td>
+                                <td class="px-4 py-3 font-medium text-brand-dark bg-emerald-50/50">Base structurée et documentée : <strong>moins de friction</strong> pour vos équipes en TMA.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink">Risque de projet</td>
+                                <td class="px-4 py-3">Les projets greenfield dépassent souvent budget / délais — ordre de grandeur courant <strong class="text-ink">~70 %</strong> des initiatives IT en dépassement.</td>
+                                <td class="px-4 py-3 font-medium text-brand-dark bg-emerald-50/50">Livrable <strong>battle-tested</strong> sur le périmètre fonctionnel présenté : risque de surcoût maîtrisé.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink">Intégration &amp; évolutions</td>
+                                <td class="px-4 py-3">Connexions SI, reprises de données, itérations de périmètre : effort souvent sous-estimé au démarrage.</td>
+                                <td class="px-4 py-3 font-medium text-brand-dark bg-emerald-50/50"><strong>Architecture modulaire</strong> : modules séparés (parcelles, météo, marchés, alertes) pour intégrer et faire évoluer sans “tout casser”.</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium text-ink">Souveraineté</td>
+                                <td class="px-4 py-3">IP interne — mais coût d’opportunité élevé.</td>
+                                <td class="px-4 py-3 font-medium text-brand-dark bg-emerald-50/50"><strong>Cession du code source</strong> dans le périmètre le plus large présenté en fin de document : actif maîtrisé côté Veragro, sans dépendance prolongée au vendeur.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APIs -->
+    <section id="apis" class="py-16 sm:py-22 bg-ink text-slate-300 reveal-on-scroll scroll-mt-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-2">05 · Architecture données</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">Connecteurs et référentiels marché</h2>
+            <p class="mt-4 text-slate-400 text-sm max-w-2xl">Stack prévue pour Veragrow — contractualisation des quotas et conformité RGPD à valider avec votre DSI et vos juristes.</p>
+            <div class="mt-10 grid sm:grid-cols-2 gap-4">
+                <div class="rounded-xl border border-white/10 bg-white/[0.04] p-5 shadow-sm">
+                    <h3 class="text-sm font-bold tracking-tight text-white">Cartographie &amp; 3D</h3>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">Mapbox, Google Earth Engine, IGN (Géoportail / parcelles).</p>
+                </div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.04] p-5 shadow-sm">
+                    <h3 class="text-sm font-bold tracking-tight text-white">Satellite &amp; IA</h3>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">Copernicus Sentinel-1 &amp; 2 — NDVI, humidité des sols.</p>
+                </div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.04] p-5 shadow-sm">
+                    <h3 class="text-sm font-bold tracking-tight text-white">Météo</h3>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">Météo-France API Agro, OpenWeatherMap.</p>
+                </div>
+                <div class="rounded-xl border border-white/10 bg-white/[0.04] p-5 shadow-sm">
+                    <h3 class="text-sm font-bold tracking-tight text-white">Marchés</h3>
+                    <p class="mt-2 text-xs sm:text-sm text-slate-400 leading-relaxed">Euronext via Commodities-API (flux temps réel).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Spécifications techniques / Stack -->
+    <section id="stack" class="py-16 sm:py-22 bg-white border-t border-slate-200 reveal-on-scroll scroll-mt-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">06 · Spécifications techniques</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight">Architecture &amp; stack livrable</h2>
+            <p class="mt-4 text-slate-600 text-sm sm:text-base max-w-2xl">Choix technologiques orientés <strong class="text-ink">maintenabilité</strong>, <strong class="text-ink">performance</strong> et <strong class="text-ink">prise en main par vos équipes Veragro</strong> — sans stack propriétaire opaque.</p>
+
+            <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm flex flex-col">
+                    <span class="inline-flex w-fit rounded-lg bg-[#61DAFB]/15 px-2.5 py-1 text-xs font-bold tracking-tight text-cyan-900 ring-1 ring-cyan-700/15">React</span>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed flex-1">Interface riche et composants réutilisables — <strong class="text-ink text-[13px]">accélère l’onboarding</strong> de vos développeurs front et le delivery UX.</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm flex flex-col">
+                    <span class="inline-flex w-fit rounded-lg bg-[#339933]/15 px-2.5 py-1 text-xs font-bold tracking-tight text-green-900 ring-1 ring-green-800/15">Node.js</span>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed flex-1">Runtime éprouvé pour APIs et agrégations (météo, marchés, files) — <strong class="text-ink text-[13px]">un seul langage</strong> côté serveur pour réduire le coût de compétence.</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm flex flex-col">
+                    <span class="inline-flex w-fit rounded-lg bg-[#336791]/15 px-2.5 py-1 text-xs font-bold tracking-tight text-slate-800 ring-1 ring-slate-600/15">PostgreSQL</span>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed flex-1"><strong class="text-ink text-[13px]">Intégrité des données</strong> (ACID, contraintes, historisation) — socle adapté aux référentiels parcelles, utilisateurs et séries temporelles.</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm flex flex-col">
+                    <span class="inline-flex w-fit rounded-lg bg-[#2496ED]/15 px-2.5 py-1 text-xs font-bold tracking-tight text-blue-900 ring-1 ring-blue-800/15">Docker</span>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed flex-1">Environnements <strong class="text-ink text-[13px]">reproductibles</strong> du poste de dev au cloud ou on-prem Veragro — pipelines CI/CD plus fiables, moins d’écarts « ça marche chez moi ».</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm flex flex-col sm:col-span-2 lg:col-span-2">
+                    <span class="inline-flex w-fit rounded-lg bg-brand-muted px-2.5 py-1 text-xs font-bold tracking-tight text-brand-dark ring-1 ring-brand/20">Architecture micro-services</span>
+                    <p class="mt-3 text-sm text-slate-600 leading-relaxed flex-1">Découplage par domaine (auth, parcelles, marchés, notifications) — <strong class="text-ink text-[13px]">scalabilité horizontale</strong> service par service selon la charge, sans refonte monolithique coûteuse.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Standards de qualité -->
+    <section id="qualite" class="py-16 sm:py-22 bg-slate-50 border-t border-slate-200 reveal-on-scroll scroll-mt-32">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">07 · Standards de qualité</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight">Engagements livrables côté ingénierie</h2>
+            <p class="mt-4 text-slate-600 text-sm max-w-2xl">Critères alignés sur ce qu’attend une <strong class="text-ink">DSI industrielle</strong> pour industrialiser Veragrow en production.</p>
+
+            <ul class="mt-10 space-y-4 max-w-3xl">
+                <li class="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand text-white" aria-hidden="true">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <div>
+                        <p class="font-semibold tracking-tight text-ink">Couverture de tests</p>
+                        <p class="mt-1 text-sm text-slate-600 m-0">Tests unitaires et d’intégration ciblant <strong class="text-ink">&gt; 80 %</strong> sur le périmètre critique — réduction du risque de régression à chaque release Veragro.</p>
+                    </div>
+                </li>
+                <li class="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand text-white" aria-hidden="true">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <div>
+                        <p class="font-semibold tracking-tight text-ink">Sécurité</p>
+                        <p class="mt-1 text-sm text-slate-600 m-0">Mitigation des risques <strong class="text-ink">OWASP Top 10</strong> (entêtes, validation, sessions) ; <strong class="text-ink">chiffrement AES-256</strong> des données sensibles au repos et TLS en transit.</p>
+                    </div>
+                </li>
+                <li class="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand text-white" aria-hidden="true">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <div>
+                        <p class="font-semibold tracking-tight text-ink">Documentation</p>
+                        <p class="mt-1 text-sm text-slate-600 m-0">Spécification <strong class="text-ink">OpenAPI (Swagger)</strong> pour les APIs ; <strong class="text-ink">README de déploiement</strong> détaillé (variables d’environnement, migrations, healthchecks).</p>
+                    </div>
+                </li>
+                <li class="flex gap-4 rounded-xl border border-slate-200 bg-white p-4 sm:p-5 shadow-sm">
+                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-brand text-white" aria-hidden="true">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                    </span>
+                    <div>
+                        <p class="font-semibold tracking-tight text-ink">Clean code</p>
+                        <p class="mt-1 text-sm text-slate-600 m-0">Principes <strong class="text-ink">SOLID</strong> et <strong class="text-ink">architecture en couches</strong> (domaine / application / infrastructure) pour faciliter la maintenance et les évolutions par vos équipes Veragro.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <footer class="border-t border-slate-200 bg-white py-10 reveal-on-scroll">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+                <p class="text-sm font-semibold tracking-tight text-ink">Veragrow — présentation Veragro</p>
+                <p class="text-xs text-slate-500 mt-1">Document de travail · réservé aux participants au rendez-vous.</p>
+            </div>
+            <p class="text-xs text-slate-400">© Contenu non public — ne pas diffuser hors réunion convenue.</p>
+        </div>
+    </footer>
+
+    <script>
+        (function () {
+            var bar = document.getElementById('scroll-progress-bar');
+            var track = document.getElementById('scroll-progress-track');
+            var header = document.getElementById('site-header');
+            var curtain = document.getElementById('boot-curtain');
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            function onScroll() {
+                var el = document.documentElement;
+                var max = el.scrollHeight - el.clientHeight;
+                var pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
+                if (bar) bar.style.width = pct + '%';
+                if (track) track.setAttribute('aria-valuenow', String(pct));
+                if (header) {
+                    if (el.scrollTop > 12) header.classList.add('is-scrolled');
+                    else header.classList.remove('is-scrolled');
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+
+            function finishBoot() {
+                document.body.classList.add('is-ready');
+                if (curtain) {
+                    curtain.classList.add('is-hidden');
+                    curtain.addEventListener('transitionend', function once() {
+                        curtain.removeEventListener('transitionend', once);
+                        curtain.setAttribute('aria-hidden', 'true');
+                    });
+                }
+            }
+
+            if (reduceMotion) {
+                finishBoot();
+            } else {
+                requestAnimationFrame(function () {
+                    requestAnimationFrame(function () {
+                        setTimeout(finishBoot, 40);
+                    });
+                });
+            }
+
+            if (reduceMotion) return;
+            var nodes = document.querySelectorAll('.reveal-on-scroll');
+            var io = new IntersectionObserver(function (entries) {
+                entries.forEach(function (e) {
+                    if (!e.isIntersecting) return;
+                    e.target.classList.add('reveal-visible');
+                    if (e.target.getAttribute('data-reveal-once') !== 'false') {
+                        io.unobserve(e.target);
+                    }
+                });
+            }, { rootMargin: '0px 0px -6% 0px', threshold: 0.07 });
+            nodes.forEach(function (n) { io.observe(n); });
+        })();
+    </script>
+</body>
+</html>
