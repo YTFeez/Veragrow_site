@@ -11,57 +11,219 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            DEFAULT: '#065f46',
-                            dark: '#064e3b',
-                            light: '#047857',
-                            muted: '#d1fae5',
-                        },
-                        ink: '#1e293b',
-                    },
-                    transitionTimingFunction: {
-                        'out-expo': 'cubic-bezier(0.16, 1, 0.3, 1)',
-                        'out-soft': 'cubic-bezier(0.33, 1, 0.68, 1)',
-                    },
-                    keyframes: {
-                        meshFade: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '0.06' },
-                        },
-                        orbDrift: {
-                            '0%, 100%': { transform: 'translate(0, 0) scale(1)' },
-                            '50%': { transform: 'translate(2%, -1%) scale(1.03)' },
-                        },
-                    },
-                    animation: {
-                        'mesh-fade': 'meshFade 2.2s ease-out forwards',
-                        'orb-drift': 'orbDrift 18s ease-in-out infinite',
-                    },
-                },
-            },
-        };
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+      colors: {
+        brand: { DEFAULT: '#065f46', dark: '#064e3b', light: '#047857', muted: '#d1fae5' },
+        ink: '#1e293b',
+      },
+      keyframes: {
+        meshFade: { '0%': { opacity: '0' }, '100%': { opacity: '0.06' } },
+        orbDrift: {
+          '0%, 100%': { transform: 'translate(0,0) scale(1)' },
+          '50%': { transform: 'translate(2%,-1%) scale(1.03)' },
+        },
+      },
+      animation: {
+        'mesh-fade': 'meshFade 2.2s ease-out forwards',
+        'orb-drift': 'orbDrift 18s ease-in-out infinite',
+      },
+    },
+  },
+};
     </script>
     <style>
         :root {
-            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-            --reveal-duration: 0.85s;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+            --t-reveal: 0.72s;
         }
         html { scroll-padding-top: 6.5rem; }
         body {
-            font-feature-settings: "cv02", "cv03", "ss01";
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+        }
+        .copy-wide {
+            width: 100%;
+            max-width: none;
+            line-height: 1.65;
+        }
+        @media (min-width: 640px) {
+            .copy-wide { line-height: 1.7; }
         }
         ::selection {
             background-color: rgb(6 95 70 / 0.18);
             color: inherit;
+        }
+        #boot-curtain {
+            pointer-events: auto;
+            transition: opacity 0.65s var(--ease), visibility 0.65s step-end;
+        }
+        #boot-curtain.is-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(1.1rem);
+            filter: blur(4px);
+            transition:
+                opacity var(--t-reveal) var(--ease),
+                transform var(--t-reveal) var(--ease),
+                filter 0.5s var(--ease);
+        }
+        .reveal-on-scroll.reveal-visible {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+        }
+        @keyframes heroFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(1rem);
+                filter: blur(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+        .hero-animate-in {
+            opacity: 0;
+            animation: heroFadeUp 0.72s var(--ease) forwards;
+            animation-play-state: paused;
+        }
+        body.is-ready .hero-animate-in {
+            animation-play-state: running;
+        }
+        #site-header {
+            transition: box-shadow 0.4s var(--ease), background-color 0.35s ease, border-color 0.35s ease, backdrop-filter 0.35s ease;
+        }
+        #site-header.is-scrolled {
+            box-shadow: 0 1px 0 rgb(15 23 42 / 0.06), 0 14px 44px -14px rgb(15 23 42 / 0.14);
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.22s ease, background-color 0.22s ease, transform 0.22s ease;
+        }
+        .nav-link:hover {
+            transform: translateY(-1px);
+        }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 0.75rem;
+            right: 0.75rem;
+            bottom: 0.35rem;
+            height: 2px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, #065f46, #047857);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.38s var(--ease);
+        }
+        .nav-link:hover::after,
+        .nav-link:focus-visible::after {
+            transform: scaleX(1);
+        }
+        #scroll-progress-bar {
+            transition: width 0.12s var(--ease);
+            background: linear-gradient(90deg, #064e3b, #065f46, #047857);
+            box-shadow: 0 0 12px rgb(6 95 70 / 0.35);
+        }
+        a:focus-visible,
+        summary:focus-visible {
+            outline: 2px solid #065f46;
+            outline-offset: 2px;
+        }
+        @keyframes mockGrow {
+            from { transform: scaleY(0.45); opacity: 0.35; }
+            to { transform: scaleY(1); opacity: 1; }
+        }
+        .mock-bar {
+            transform-origin: bottom center;
+            animation: mockGrow 0.95s var(--ease) forwards;
+            animation-play-state: paused;
+        }
+        body.is-ready .mock-bar {
+            animation-play-state: running;
+        }
+        .mock-bar:nth-child(1) { animation-delay: 0.32s; }
+        .mock-bar:nth-child(2) { animation-delay: 0.39s; }
+        .mock-bar:nth-child(3) { animation-delay: 0.46s; }
+        .mock-bar:nth-child(4) { animation-delay: 0.53s; }
+        .mock-bar:nth-child(5) { animation-delay: 0.6s; }
+        .mock-bar:nth-child(6) { animation-delay: 0.67s; }
+        section .rounded-xl.border:not(.tilt-surface),
+        section article.rounded-xl:not(.tilt-surface) {
+            transition: transform 0.38s var(--ease), box-shadow 0.38s var(--ease), border-color 0.28s ease, background-color 0.35s ease;
+        }
+        #technique .rounded-xl.border:not(.tilt-surface):hover,
+        #technique li:hover {
+            box-shadow: 0 18px 42px -12px rgb(0 0 0 / 0.45);
+        }
+        #technique .rounded-xl:not(.tilt-surface),
+        #technique li {
+            transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), border-color 0.25s ease, background-color 0.3s ease;
+        }
+        #technique .rounded-xl:not(.tilt-surface):hover,
+        #technique li:hover {
+            transform: translateY(-2px);
+        }
+        tbody tr {
+            transition: background-color 0.18s ease, color 0.15s ease;
+        }
+        tbody tr:hover {
+            background-color: rgb(248 250 252 / 0.95);
+        }
+        tbody tr.bg-emerald-50\/40:hover {
+            background-color: rgb(236 253 245 / 0.85);
+        }
+        tbody tr.bg-violet-50\/50:hover {
+            background-color: rgb(245 243 255 / 0.9);
+        }
+        .overflow-x-auto {
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+        }
+        details[open] summary {
+            background-color: rgb(248 250 252);
+        }
+        .tilt-wrap {
+            display: block;
+            width: 100%;
+            perspective: 920px;
+            transform-style: preserve-3d;
+        }
+        .tilt-surface {
+            transform-style: preserve-3d;
+            transition: transform 0.12s ease-out, box-shadow 0.35s var(--ease), border-color 0.28s ease, background-color 0.35s ease;
+        }
+        .tilt-depth {
+            position: relative;
+            z-index: 1;
+            transition: transform 0.14s ease-out;
+            transform-style: preserve-3d;
+        }
+        section .rounded-xl.border:not(.tilt-surface):hover,
+        section article.rounded-xl:not(.tilt-surface):hover {
+            transform: translateY(-3px);
+        }
+        section:not(#technique) .rounded-xl.border:not(.tilt-surface):hover,
+        section article.rounded-xl:not(.tilt-surface):hover {
+            box-shadow: 0 16px 36px -14px rgb(15 23 42 / 0.16);
+        }
+        .tilt-wrap:hover .tilt-surface {
+            box-shadow: 0 18px 40px -14px rgb(15 23 42 / 0.18);
+        }
+        section.bg-gradient-to-b .tilt-wrap:hover .tilt-surface,
+        section.relative .tilt-wrap:hover .tilt-surface {
+            box-shadow: 0 22px 48px -12px rgb(0 0 0 / 0.45);
+        }
+        #technique .tilt-wrap:hover .tilt-surface {
+            box-shadow: 0 22px 50px -10px rgb(0 0 0 / 0.55);
         }
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
@@ -78,136 +240,25 @@
                 animation: none !important;
             }
             #boot-curtain { display: none !important; }
-        }
-        /* Entrée page */
-        #boot-curtain {
-            pointer-events: auto;
-            transition: opacity 0.7s var(--ease-out-expo), visibility 0.7s step-end;
-        }
-        #boot-curtain.is-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        /* Révélation sections */
-        .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(1.35rem);
-            filter: blur(5px);
-            transition:
-                opacity var(--reveal-duration) var(--ease-out-expo),
-                transform var(--reveal-duration) var(--ease-out-expo),
-                filter 0.55s var(--ease-out-expo);
-            will-change: opacity, transform, filter;
-        }
-        .reveal-on-scroll.reveal-visible {
-            opacity: 1;
-            transform: translateY(0);
-            filter: blur(0);
-            will-change: auto;
-        }
-        /* Héro : cascade au chargement */
-        @keyframes heroFadeUp {
-            from {
-                opacity: 0;
-                transform: translateY(1.15rem);
-                filter: blur(6px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-                filter: blur(0);
-            }
-        }
-        .hero-animate-in {
-            opacity: 0;
-            animation: heroFadeUp 0.78s var(--ease-out-expo) forwards;
-            animation-play-state: paused;
-        }
-        body.is-ready .hero-animate-in {
-            animation-play-state: running;
-        }
-        /* Navigation */
-        #site-header {
-            transition: box-shadow 0.35s var(--ease-out-expo), background-color 0.35s ease, border-color 0.35s ease;
-        }
-        #site-header.is-scrolled {
-            box-shadow: 0 1px 0 rgb(15 23 42 / 0.06), 0 12px 40px -16px rgb(15 23 42 / 0.12);
-        }
-        .nav-link {
-            position: relative;
-            transition: color 0.25s ease, background-color 0.25s ease;
-        }
-        .nav-link::after {
-            content: "";
-            position: absolute;
-            left: 0.75rem;
-            right: 0.75rem;
-            bottom: 0.35rem;
-            height: 2px;
-            border-radius: 2px;
-            background: linear-gradient(90deg, #065f46, #047857);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.35s var(--ease-out-expo);
-        }
-        .nav-link:hover::after,
-        .nav-link:focus-visible::after {
-            transform: scaleX(1);
-        }
-        /* Progression lecture */
-        #scroll-progress-bar {
-            transition: width 0.15s var(--ease-out-expo);
-            background: linear-gradient(90deg, #064e3b, #065f46, #047857);
-            box-shadow: 0 0 12px rgb(6 95 70 / 0.35);
-        }
-        @media (prefers-reduced-motion: reduce) {
             #scroll-progress-bar { transition: none; box-shadow: none; }
-        }
-        /* Cartes & pricing */
-        .pricing-card {
-            will-change: transform;
-        }
-        .pricing-card:active {
-            transform: translateY(-0.25rem) scale(0.995);
-        }
-        @media (prefers-reduced-motion: reduce) {
-            .pricing-card:active { transform: none; }
-        }
-        /* Focus clavier */
-        a:focus-visible,
-        summary:focus-visible {
-            outline: 2px solid #065f46;
-            outline-offset: 2px;
-        }
-        /* Détail mockup barres */
-        @keyframes mockGrow {
-            from { transform: scaleY(0.45); opacity: 0.35; }
-            to { transform: scaleY(1); opacity: 1; }
-        }
-        .mock-bar {
-            transform-origin: bottom center;
-            animation: mockGrow 1s var(--ease-out-expo) forwards;
-            animation-play-state: paused;
-        }
-        body.is-ready .mock-bar {
-            animation-play-state: running;
-        }
-        .mock-bar:nth-child(1) { animation-delay: 0.35s; }
-        .mock-bar:nth-child(2) { animation-delay: 0.42s; }
-        .mock-bar:nth-child(3) { animation-delay: 0.49s; }
-        .mock-bar:nth-child(4) { animation-delay: 0.56s; }
-        .mock-bar:nth-child(5) { animation-delay: 0.63s; }
-        .mock-bar:nth-child(6) { animation-delay: 0.7s; }
-        @media (prefers-reduced-motion: reduce) {
             .mock-bar { animation: none !important; opacity: 1; transform: none; }
+            section .rounded-xl.border:not(.tilt-surface):hover,
+            section article.rounded-xl:not(.tilt-surface):hover,
+            #technique .rounded-xl:not(.tilt-surface):hover,
+            #technique li:hover {
+                transform: none;
+            }
+            .tilt-surface,
+            .tilt-depth {
+                transform: none !important;
+            }
+            .nav-link:hover { transform: none; }
         }
     </style>
 </head>
 <body class="bg-white text-slate-800 antialiased font-sans text-[15px] leading-relaxed text-left">
     <div id="boot-curtain" class="fixed inset-0 z-[150] bg-white" aria-hidden="true"></div>
 
-    <!-- Bannière exclusivité + barre de progression -->
     <div class="fixed inset-x-0 top-0 z-[100]">
         <div class="bg-ink text-center px-3 py-2 text-[11px] sm:text-xs font-medium text-white/95 border-b border-white/10">
             <span class="text-slate-400">Document confidentiel</span>
@@ -224,10 +275,8 @@
     <header id="site-header" class="fixed inset-x-0 top-[3.5rem] sm:top-[3.25rem] z-50 border-b border-slate-200/90 bg-white/90 backdrop-blur-xl backdrop-saturate-150 shadow-sm">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex h-14 sm:h-16 items-center justify-between gap-3">
-                <a href="#" class="flex items-center gap-2.5 min-w-0">
-                    <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-brand text-white shadow-sm">
-                        <svg class="h-[18px] w-[18px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-                    </span>
+                <a href="#" class="flex items-center gap-3 min-w-0">
+                    <img src="Logo-Veragrow-Opti%20(1).webp" alt="Veragrow" width="160" height="160" class="h-9 w-auto max-h-9 shrink-0 object-contain rounded-lg" decoding="async">
                     <div class="min-w-0 leading-tight">
                         <span class="block text-sm font-semibold tracking-tight text-ink truncate">Veragrow</span>
                         <span class="block text-[10px] font-medium uppercase tracking-wider text-slate-500 truncate">Synthèse projet</span>
@@ -248,33 +297,38 @@
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
                     </summary>
                     <div class="absolute right-0 mt-2 w-52 rounded-xl border border-slate-200 bg-white py-1 shadow-sm z-50">
-                        <a href="#probleme" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Vision</a>
-                        <a href="#marche" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">APIs &amp; marché</a>
-                        <a href="#solution" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">L’app</a>
-                        <a href="#produit" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Démonstration</a>
-                        <a href="#fonctions" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Fonctionnalités</a>
-                        <a href="#compare" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Positionnement</a>
-                        <a href="#technique" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Architecture</a>
+                        <a href="#probleme" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">Vision</a>
+                        <a href="#marche" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">APIs &amp; marché</a>
+                        <a href="#solution" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">L’app</a>
+                        <a href="#produit" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">Démonstration</a>
+                        <a href="#fonctions" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">Fonctionnalités</a>
+                        <a href="#compare" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">Positionnement</a>
+                        <a href="#technique" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50 transition-colors duration-150">Architecture</a>
                     </div>
                 </details>
             </div>
         </div>
     </header>
 
-    <!-- Hero -->
     <section class="relative bg-gradient-to-b from-ink via-[#152238] to-brand-dark pt-[8.25rem] sm:pt-[8rem] pb-16 sm:pb-24 overflow-hidden">
         <div class="pointer-events-none absolute -left-32 top-24 h-[420px] w-[420px] rounded-full bg-emerald-500/20 blur-[100px] motion-safe:animate-orb-drift" aria-hidden="true"></div>
         <div class="pointer-events-none absolute -right-24 bottom-0 h-[360px] w-[360px] rounded-full bg-cyan-500/10 blur-[90px] motion-safe:animate-orb-drift" style="animation-delay: -9s" aria-hidden="true"></div>
         <div class="absolute inset-0 motion-safe:animate-mesh-fade opacity-0" style="background-image: linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 40px 40px;" aria-hidden="true"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-ink/40 pointer-events-none" aria-hidden="true"></div>
         <div class="relative max-w-6xl mx-auto px-4 sm:px-6">
-            <div class="max-w-2xl">
+            <div class="w-full max-w-none copy-wide">
                 <p class="hero-animate-in text-[11px] font-semibold uppercase tracking-widest text-emerald-300/90 mb-4" style="animation-delay: 0.08s">Dossier confidentiel · usage restreint</p>
-                <h1 class="hero-animate-in text-3xl sm:text-4xl lg:text-[2.65rem] font-bold tracking-tight text-white leading-[1.15]" style="animation-delay: 0.16s">
+                <div class="hero-animate-in mb-5 flex items-center gap-4" style="animation-delay: 0.12s">
+                    <img src="Logo-Veragrow-Opti%20(1).webp" alt="" width="200" height="200" class="h-12 w-auto sm:h-14 object-contain drop-shadow-lg brightness-0 invert opacity-95" decoding="async">
+                    <h1 class="text-3xl sm:text-4xl lg:text-[2.65rem] font-bold tracking-tight text-white leading-[1.15] m-0 flex-1 min-w-0">
                     Veragrow : l’app mobile, les données et les intégrations
-                </h1>
+                    </h1>
+                </div>
                 <p class="hero-animate-in mt-6 text-base sm:text-lg text-slate-300 leading-relaxed font-medium" style="animation-delay: 0.26s">
                     Vous y trouvez la vision de l’<strong class="text-white font-semibold">application Veragrow</strong> sur <strong class="text-white font-semibold">iOS et Android</strong>, avec le <strong class="text-white font-semibold">socle serveur</strong> (API, authentification, persistance), puis une <strong class="text-white font-semibold">grande table</strong> qui parcourt les <strong class="text-white font-semibold">flux et intégrations</strong> du marché et ce que Veragrow peut enchaîner de façon réaliste.
+                </p>
+                <p class="hero-animate-in mt-4 text-sm sm:text-base text-slate-400 leading-relaxed max-w-none" style="animation-delay: 0.34s">
+                    <strong class="text-slate-300">Réalisation :</strong> <strong class="text-white font-semibold">c’est moi</strong> qui mène tout le <strong class="text-white font-semibold">développement et l’intégration</strong>, <strong class="text-white font-semibold">pour Veragrow</strong> — <strong class="text-white font-semibold">seul</strong>, sans collectif derrière. <strong class="text-white font-semibold">Vous</strong> n’avez <strong class="text-white font-semibold">rien à coder</strong> : votre part, ce sont les <strong class="text-white font-semibold">choix métier</strong>, les <strong class="text-white font-semibold">validations</strong> et la <strong class="text-white font-semibold">réception</strong> du produit.
                 </p>
                 <div class="hero-animate-in mt-8 flex flex-wrap gap-3" style="animation-delay: 0.42s">
                     <a href="#probleme" class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-semibold text-brand shadow-md shadow-black/10 hover:bg-brand-muted hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-out">La vision</a>
@@ -282,10 +336,10 @@
                 </div>
             </div>
 
-            <!-- Bento mockup : faux dashboard -->
             <div id="produit" class="reveal-on-scroll mt-14 lg:mt-16 scroll-mt-28">
                 <p class="text-xs font-semibold uppercase tracking-wider text-emerald-300/80 mb-3">Maquette produit (illustrative)</p>
-                <div class="rounded-xl border border-white/15 bg-white/[0.07] p-3 sm:p-4 shadow-lg shadow-black/20 backdrop-blur-md transition-shadow duration-500 ease-out hover:border-white/25 hover:shadow-xl hover:shadow-black/25">
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-white/15 bg-white/[0.07] p-3 sm:p-4 shadow-lg shadow-black/20 backdrop-blur-md transition-shadow duration-500 ease-out hover:border-white/25">
                     <div class="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3 mb-3">
                         <div class="flex items-center gap-2">
                             <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
@@ -297,7 +351,6 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-12 gap-2 sm:gap-3">
-                        <!-- Carte large : mini carte -->
                         <div class="col-span-12 md:col-span-7 rounded-xl bg-gradient-to-br from-slate-100 to-emerald-50 p-4 border border-slate-200/80 shadow-sm min-h-[140px] relative overflow-hidden">
                             <div class="absolute inset-0 opacity-40 bg-gradient-to-tr from-brand/20 to-transparent"></div>
                             <div class="relative flex justify-between items-start">
@@ -317,7 +370,6 @@
                             </div>
                             <p class="relative mt-2 text-[10px] text-slate-600 font-medium">Indicateur de végétation — lecture immédiate sur le terrain</p>
                         </div>
-                        <!-- Colonne droite : widgets -->
                         <div class="col-span-12 md:col-span-5 grid grid-cols-2 gap-2 sm:gap-3">
                             <div class="rounded-xl bg-white p-3 border border-slate-200 shadow-sm">
                                 <div class="flex items-center justify-between">
@@ -345,35 +397,40 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </div>
     </section>
 
     <div class="border-b border-slate-200/90 bg-gradient-to-b from-slate-50 to-white reveal-on-scroll">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5">
-            <p class="text-left text-xs sm:text-sm font-medium text-slate-600 tracking-tight max-w-4xl">
-                <span class="text-ink font-semibold">À retenir</span> — <strong class="text-ink">Veragrow</strong> est une application mobile <strong class="text-ink">iOS &amp; Android</strong> qui unifie parcelles (RPG), météo ultra-locale, marchés Euronext et alertes d’aide à la décision, avec <strong class="text-ink">backend, authentification, code et déploiement stores</strong>. La suite du dossier détaille le <strong class="text-ink">comparatif d’intégrations</strong> et la stack technique.
+            <div class="tilt-wrap" data-tilt>
+            <div class="tilt-surface rounded-xl border border-slate-200/90 bg-white px-4 py-4 sm:px-5 sm:py-4 shadow-sm">
+            <p class="tilt-depth text-left text-xs sm:text-sm font-medium text-slate-600 tracking-tight w-full max-w-none copy-wide m-0" data-tilt-depth="10">
+                <span class="text-ink font-semibold">À retenir</span> — <strong class="text-ink">Veragrow</strong> est une application mobile <strong class="text-ink">iOS &amp; Android</strong> qui unifie parcelles (RPG), météo ultra-locale, marchés Euronext et alertes d’aide à la décision, avec <strong class="text-ink">backend, authentification, code et déploiement stores</strong>. <strong class="text-ink">Je développe tout ça pour Veragrow</strong>, <strong class="text-ink">seul</strong> ; <strong class="text-ink">de votre côté</strong>, il s’agit d’<strong class="text-ink">arbitrer</strong> et de <strong class="text-ink">recevoir</strong>, pas d’écrire le code. La suite du dossier détaille le <strong class="text-ink">comparatif d’intégrations</strong> et la stack technique.
             </p>
+            </div>
+            </div>
         </div>
     </div>
 
-    <!-- 1. Vision produit -->
-    <section id="probleme" class="py-16 sm:py-22 bg-white scroll-mt-32 reveal-on-scroll">
+    <section id="probleme" class="py-20 sm:py-28 bg-white scroll-mt-32 reveal-on-scroll">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">01 · Positionnement</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Ce que Veragrow change pour l’exploitant</h2>
-            <div class="mt-8 max-w-3xl rounded-xl border border-emerald-200 bg-brand-muted/50 p-6 sm:p-8 shadow-sm">
-                <p class="text-base sm:text-lg text-slate-800 leading-relaxed m-0">Regrouper ce qui compte vraiment (<strong class="text-ink">météo</strong>, <strong class="text-ink">marchés</strong>, <strong class="text-ink">parcelles</strong>, <strong class="text-ink">alertes</strong>) dans <strong class="text-ink">une seule interface claire</strong>, pour que <strong class="text-ink">l’exploitant</strong> décide plus vite et sans enchaîner <strong class="text-ink">plusieurs</strong> applications ou onglets différents.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight w-full max-w-none">Ce que Veragrow change pour l’exploitant</h2>
+            <div class="tilt-wrap mt-8" data-tilt>
+            <div class="tilt-surface w-full max-w-none rounded-xl border border-emerald-200 bg-brand-muted/50 p-6 sm:p-8 shadow-sm">
+                <p class="tilt-depth text-base sm:text-lg text-slate-800 leading-relaxed m-0 copy-wide" data-tilt-depth="8">Regrouper ce qui compte vraiment (<strong class="text-ink">météo</strong>, <strong class="text-ink">marchés</strong>, <strong class="text-ink">parcelles</strong>, <strong class="text-ink">alertes</strong>) dans <strong class="text-ink">une seule interface claire</strong>, pour que <strong class="text-ink">l’exploitant</strong> décide plus vite et sans enchaîner <strong class="text-ink">plusieurs</strong> applications ou onglets différents.</p>
+            </div>
             </div>
         </div>
     </section>
 
-    <!-- Panorama marché (concurrence + météo + référence UX) -->
-    <section id="marche" class="py-16 sm:py-22 bg-slate-50 border-y border-slate-200 reveal-on-scroll scroll-mt-32">
+    <section id="marche" class="py-20 sm:py-28 bg-slate-50 border-y border-slate-200 reveal-on-scroll scroll-mt-32">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">01 bis · Rendu APIs &amp; marché</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Comparatif des flux : concurrents et Veragrow</h2>
-            <p class="mt-4 text-sm sm:text-base text-slate-600 max-w-3xl leading-relaxed">Ici on lit <strong class="text-ink">qui ouvre quoi</strong> côté flux : pour chaque famille d’acteurs, <strong class="text-ink">comment les données circulent</strong> (ouvertes, fermées, partenaires) et où la <strong class="text-ink">solution Veragrow</strong> peut s’insérer sans tout reconstruire — par exemple en reprenant des stations <strong class="text-ink">Sencrop</strong> ou <strong class="text-ink">Weenat</strong> déjà au champ via leurs APIs REST.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight w-full max-w-none">Comparatif des flux : concurrents et Veragrow</h2>
+            <p class="mt-4 text-sm sm:text-base text-slate-600 w-full max-w-none copy-wide leading-relaxed">Ici on lit <strong class="text-ink">qui ouvre quoi</strong> côté flux : pour chaque famille d’acteurs, <strong class="text-ink">comment les données circulent</strong> (ouvertes, fermées, partenaires) et où la <strong class="text-ink">solution Veragrow</strong> peut s’insérer sans tout reconstruire — par exemple en reprenant des stations <strong class="text-ink">Sencrop</strong> ou <strong class="text-ink">Weenat</strong> déjà au champ via leurs APIs REST.</p>
 
             <div class="mt-8 grid gap-4 sm:grid-cols-3">
                 <div class="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
@@ -467,120 +524,162 @@
                 </div>
             </div>
 
-            <div class="mt-8 rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-6 sm:p-7 shadow-sm">
+            <div class="tilt-wrap mt-8" data-tilt>
+            <div class="tilt-surface rounded-xl border border-violet-200 bg-gradient-to-br from-violet-50 to-white p-6 sm:p-7 shadow-sm">
                 <p class="text-[10px] font-bold uppercase tracking-widest text-violet-700 mb-2">Piste produit — après le kart, la gamification utile</p>
                 <h3 class="text-lg font-bold text-ink tracking-tight">Mode simulation dans Veragrow</h3>
-                <p class="mt-3 text-sm text-slate-700 leading-relaxed m-0">Sur le modèle de l’<strong class="text-ink">univers Terragrow</strong> (jeu / simulation), on peut enrichir l’application Veragrow d’un <strong class="text-ink">mode « Et si… ? »</strong> : par exemple <em>« et si je plantais du maïs au lieu du blé, avec la météo de l’an dernier — quel impact sur la marge ? »</em> Cela prolonge une approche <strong class="text-ink">ludique</strong> (kart, parcours découverte) par une <strong class="text-ink">simulation chiffrée</strong> utile en réunion ou au champ, sans remplacer les préconisations agronomiques officielles.</p>
+                <p class="mt-3 text-sm text-slate-700 leading-relaxed m-0">Sur le modèle de l’<strong class="text-ink">univers Terragrow</strong> (jeu / simulation), on peut enrichir l’application Veragrow d’un <strong class="text-ink">mode « Et si… ? »</strong> : par exemple <em>« et si je plantais du maïs au lieu du blé, avec la météo de l’an dernier — quel impact sur la marge ? »</em> Cela prolonge une approche <strong class="text-ink">ludique</strong> (kart, parcours découverte) par une <strong class="text-ink">simulation chiffrée</strong> utile en réunion ou au champ,                 sans remplacer les préconisations agronomiques officielles.</p>
+            </div>
             </div>
 
-            <p class="mt-4 text-xs text-slate-500 max-w-3xl leading-relaxed">Synthèse pour discussion avec <strong class="text-slate-600">l’entreprise Veragrow</strong> : formulations à ajuster selon vos retours terrain et votre stratégie partenariale (Isapont, Arvalis, Sencrop, Weenat…). Vérifier systématiquement les <strong class="text-slate-600">CGU et agréments</strong> avant toute intégration en production.</p>
+            <p class="mt-4 text-xs text-slate-500 w-full max-w-none copy-wide leading-relaxed">Synthèse pour discussion avec <strong class="text-slate-600">l’entreprise Veragrow</strong> : formulations à ajuster selon vos retours terrain et votre stratégie partenariale (Isapont, Arvalis, Sencrop, Weenat…). Vérifier systématiquement les <strong class="text-slate-600">CGU et agréments</strong> avant toute intégration en production.</p>
         </div>
     </section>
 
-    <!-- 2. Proposition -->
-    <section id="solution" class="py-16 sm:py-22 bg-slate-50 border-y border-slate-200 reveal-on-scroll scroll-mt-32">
+    <section id="solution" class="py-20 sm:py-28 bg-slate-50 border-y border-slate-200 reveal-on-scroll scroll-mt-32">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">02 · L’app Veragrow</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink max-w-3xl leading-tight">L’idée de l’application</h2>
-            <p class="mt-6 text-base sm:text-lg text-slate-600 max-w-3xl leading-relaxed text-left">
-                <strong class="text-ink">Veragrow</strong>, c’est une <strong class="text-ink">app mobile</strong> pour <strong class="text-ink">iPhone et Android</strong> pensée pour l’<strong class="text-ink">exploitant</strong> : voir d’un coup d’œil <strong class="text-ink">l’état des parcelles</strong>, la <strong class="text-ink">météo du champ</strong> (pas celle de la ville), les <strong class="text-ink">cours</strong> utiles à la vente, et recevoir des <strong class="text-ink">alertes</strong> quand un signal mérite l’attention — le tout dans <strong class="text-ink">un seul geste</strong>, sans enchaîner <strong class="text-ink">plusieurs</strong> outils. Au-delà de l’écran, le projet vise une <strong class="text-ink">solution prête à tenir la route</strong> : le service qui fait tourner les données, la mise en ligne sur les stores, et le <strong class="text-ink">code</strong> que vous pouvez reprendre pour faire vivre le produit (voir encadrés ci-dessous et section <strong class="text-ink">Architecture</strong>).
-            </p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink w-full max-w-none leading-tight">L’idée de l’application</h2>
+            <div class="mt-6 grid w-full max-w-none gap-8 lg:grid-cols-[1fr_min(28rem,100%)] lg:items-start lg:gap-10">
+                <p class="text-base sm:text-lg text-slate-600 leading-relaxed text-left m-0 copy-wide">
+                <strong class="text-ink">Veragrow</strong>, c’est une <strong class="text-ink">app mobile</strong> pour <strong class="text-ink">iPhone et Android</strong> pensée pour l’<strong class="text-ink">exploitant</strong> : voir d’un coup d’œil <strong class="text-ink">l’état des parcelles</strong>, la <strong class="text-ink">météo du champ</strong> (pas celle de la ville), les <strong class="text-ink">cours</strong> utiles à la vente, et recevoir des <strong class="text-ink">alertes</strong> quand un signal mérite l’attention — le tout dans <strong class="text-ink">un seul geste</strong>, sans enchaîner <strong class="text-ink">plusieurs</strong> outils. Au-delà de l’écran, le projet vise une <strong class="text-ink">solution prête à tenir la route</strong> : le service qui fait tourner les données, la mise en ligne sur les stores, et le <strong class="text-ink">code</strong> que vous <strong class="text-ink">recevez en propriété</strong> pour le faire vivre ensuite comme vous l’entendez. <strong class="text-ink">Je réalise tout le chantier</strong> (développement, branchements, build, dépôt store) <strong class="text-ink">pour Veragrow</strong>, <strong class="text-ink">seul</strong> ; <strong class="text-ink">vous</strong> n’avez <strong class="text-ink">pas de charge de production logicielle</strong> — seulement de dire ce qui compte pour vous et de valider les jalons (voir encadrés ci-dessous et section <strong class="text-ink">Architecture</strong>).
+                </p>
+                <aside id="calendrier" class="scroll-mt-32 lg:sticky lg:top-32 self-start">
+                    <div class="tilt-wrap" data-tilt>
+                    <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2 m-0">Phases</p>
+                    <p class="text-sm text-slate-600 leading-relaxed text-left m-0 copy-wide">Cadrage, développement, recette, mise en ligne : <strong class="text-ink">je</strong> cadre le <strong class="text-ink">calendrier</strong> sur des <strong class="text-ink">points de validation</strong> avec vous — <strong class="text-ink">sans travail de dev</strong> de votre côté. <strong class="text-ink">Je</strong> porte <strong class="text-ink">toute la ligne de code</strong>, <strong class="text-ink">pour Veragrow</strong>, de bout en bout.</p>
+                    </div>
+                    </div>
+                </aside>
+            </div>
 
-            <p id="calendrier" class="mt-8 scroll-mt-32 text-sm text-slate-600 leading-relaxed max-w-3xl text-left m-0">Les <strong class="text-ink">étapes</strong> — cadrage, développement, recette, mise en ligne — et leur <strong class="text-ink">durée</strong> se calent avec vous au fil du projet, au rythme des arbitrages.</p>
-
-            <div class="mt-10 grid sm:grid-cols-2 gap-4 max-w-3xl">
-                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="mt-10 grid sm:grid-cols-2 gap-4 w-full max-w-none">
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Souveraineté &amp; IP</p>
                     <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Le transfert du <strong class="text-ink">code source</strong> vous donne la <strong class="text-ink">propriété de l’actif</strong> : hébergement, évolutions et sécurité restent sous votre responsabilité.</p>
                 </div>
-                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+                </div>
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Périmètre technique</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Mobile <strong class="text-ink">natif ou cross-platform</strong> (choix au lancement avec la DSI), <strong class="text-ink">API REST</strong>, persistance, intégrations — détail en section <strong class="text-ink">Architecture</strong>.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Mobile <strong class="text-ink">natif ou cross-platform</strong> : <strong class="text-ink">je</strong> tranche le <strong class="text-ink">choix technique</strong> <strong class="text-ink">pour Veragrow</strong> ; <strong class="text-ink">vous</strong> êtes <strong class="text-ink">informés</strong>, et vous ne <strong class="text-ink">codez rien</strong>. <strong class="text-ink">API REST</strong>, persistance, intégrations — détail en section <strong class="text-ink">Architecture</strong>.</p>
+                </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 3. Fonctionnalités -->
-    <section id="fonctions" class="py-16 sm:py-22 bg-white reveal-on-scroll scroll-mt-32">
+    <section id="fonctions" class="py-20 sm:py-28 bg-white reveal-on-scroll scroll-mt-32">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">03 · Must-have produit</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Ce qui apporte de la valeur immédiate à l’agriculteur</h2>
-            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed text-left">Priorisation du <strong class="text-ink">cœur métier</strong> : une seule app pour éviter d’en ouvrir <strong class="text-ink">plusieurs</strong> pour lire l’état des champs, la météo du terrain et les cours. Sur l’<strong class="text-ink">IA</strong>, on reste sur des <strong class="text-ink">indications et alertes</strong> en aide à la décision, pas sur des prescriptions agronomiques figées.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight w-full max-w-none">Ce qui apporte de la valeur immédiate à l’agriculteur</h2>
+            <p class="mt-4 text-slate-600 text-base w-full max-w-none copy-wide leading-relaxed text-left">Priorisation du <strong class="text-ink">cœur métier</strong> : une seule app pour éviter d’en ouvrir <strong class="text-ink">plusieurs</strong> pour lire l’état des champs, la météo du terrain et les cours. Sur l’<strong class="text-ink">IA</strong>, on reste sur des <strong class="text-ink">indications et alertes</strong> en aide à la décision, pas sur des prescriptions agronomiques figées.</p>
 
-            <div class="mt-10 grid gap-4 sm:grid-cols-2">
-                <article class="rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-white to-emerald-50/50 p-5 sm:p-6 shadow-sm sm:col-span-2">
+            <div class="mt-10 grid gap-6 sm:grid-cols-2">
+                <article class="tilt-wrap sm:col-span-2" data-tilt>
+                <div class="tilt-surface rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-white to-emerald-50/50 p-5 sm:p-6 shadow-sm h-full">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">1 · Priorité maximale</span>
                     <h3 class="mt-3 text-lg font-bold tracking-tight text-ink text-left">Vue parcelle unifiée (le cœur)</h3>
                     <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left"><strong class="text-ink">Une carte</strong> pour toutes les parcelles, avec import depuis le <strong class="text-ink">RPG</strong> lorsque c’est pertinent. <strong class="text-ink">Code couleur simple</strong> pour l’état de la végétation : lecture immédiate sans jongler entre <strong class="text-ink">plusieurs</strong> apps ou onglets.</p>
+                </div>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                <article class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm h-full">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">2 · Critique</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Météo agricole ultra-locale</h3>
                     <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">Pas la météo « ville » : celle du <strong class="text-ink">champ</strong>. <strong class="text-ink">Cumuls de pluie</strong>, <strong class="text-ink">évapotranspiration (ETP)</strong> et <strong class="text-ink">fenêtres de traitement</strong> (vent, température) pour savoir quand sortir le pulvérisateur ou semer.</p>
+                </div>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+                <article class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm h-full">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">3 · Haute (business)</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Tableau de bord des marchés (Euronext)</h3>
                     <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">L’agriculteur est chef d’entreprise : <strong class="text-ink">blé, colza, maïs</strong> en flux utile sur l’<strong class="text-ink">écran d’accueil</strong>, pour arbitrer la vente de récolte sans ouvrir un site boursier à part.</p>
+                </div>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm sm:col-span-2">
+                <article class="tilt-wrap sm:col-span-2" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm h-full">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">4 · Moyenne (aide à la décision)</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Moteur d’alertes (dont signaux IA)</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">Des <strong class="text-ink">notifications courtes</strong> qui <strong class="text-ink">traduisent la donnée en action</strong> — par exemple : <em>« Risque de maladie sur la parcelle B3 — météo favorable au mildiou »</em>. L’objectif reste l’<strong class="text-ink">aide à la décision</strong> : l’exploitant garde le dernier mot au champ ; ce ne sont pas des ordres de traitement. Le <strong class="text-ink">ton</strong>, les <strong class="text-ink">seuils</strong> et le niveau de détail se peaufinent avec vous.</p>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">Notifications courtes qui <strong class="text-ink">traduisent la donnée en action</strong>, par ex. : <em>« Risque de maladie sur la parcelle B3 — météo favorable au mildiou »</em>. L’objectif est l’<strong class="text-ink">aide à la décision</strong> ; le cadre juridique et les formulations exactes restent à valider avec vos juristes.</p>
+                </div>
                 </article>
-                <article class="rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm sm:col-span-2">
+                <article class="tilt-wrap sm:col-span-2" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm h-full">
                     <span class="inline-flex rounded-lg bg-ink px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">5 · Vous gardez le produit</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Le code source vous est transféré</h3>
                     <div class="mt-3 space-y-2.5 text-sm text-slate-600 leading-relaxed text-left">
-                        <p class="m-0">Vous ne recevez pas seulement une app à installer sur le store : vous recevez le <strong class="text-ink">code</strong>, la <strong class="text-ink">configuration serveur</strong> et la <strong class="text-ink">documentation</strong> qui vont avec.</p>
-                        <p class="m-0">Votre équipe (ou un autre prestataire) peut <strong class="text-ink">corriger, faire évoluer et sécuriser</strong> le système sans repartir de zéro.</p>
+                        <p class="m-0"><strong class="text-ink">Je</strong> ne vous laisse pas une app « boîte noire » : <strong class="text-ink">je vous livre</strong> le <strong class="text-ink">code</strong>, la <strong class="text-ink">configuration serveur</strong> et la <strong class="text-ink">documentation</strong> — le tout produit <strong class="text-ink">pour Veragrow</strong> pendant le chantier.</p>
+                        <p class="m-0">Pendant le projet, <strong class="text-ink">je développe seul pour Veragrow</strong> — pas de collectif derrière le clavier. Après livraison, <strong class="text-ink">vous choisissez</strong> : <strong class="text-ink">un autre prestataire</strong>, un <strong class="text-ink">profil salarié</strong> chez vous, ou la <strong class="text-ink">continuité avec moi</strong>.</p>
                         <p class="m-0">En clair : pas de <strong class="text-ink">boîte noire</strong> — vous restez maître de l’outil après la livraison.</p>
                     </div>
+                </div>
                 </article>
             </div>
         </div>
     </section>
 
-    <!-- 4. Positionnement -->
-    <section id="compare" class="py-16 sm:py-22 bg-white border-t border-slate-200 reveal-on-scroll scroll-mt-32">
+    <section id="compare" class="py-20 sm:py-28 bg-white border-t border-slate-200 reveal-on-scroll scroll-mt-32">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">04 · Positionnement</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Partir d’un socle décrit ou tout reconstruire en interne</h2>
-            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed text-left">Ce dossier rassemble la <strong class="text-ink">même photographie</strong> pour le métier, la technique et la finance : fonctions indispensables, tableau des intégrations, architecture cible. L’alternative, c’est l’historique classique — cahier des charges qui grossit, recrutements, premières livraisons tardives. Ici l’objectif est simple : <strong class="text-ink">donner un repère commun</strong> pour décider vite si Veragrow correspond à votre trajectoire.</p>
-            <div class="mt-10 grid gap-4 md:grid-cols-3">
-                <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Démarrage plus lisible</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Must-have produit, comparatif des flux et stack déjà posés : moins de zones grises au moment où l’on attaque le chantier.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight w-full max-w-none">Deux façons d’arriver à une app terrain complète</h2>
+            <div class="mt-6 grid w-full max-w-none gap-8 md:grid-cols-2 md:gap-10">
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-100 bg-slate-50/80 p-5 sm:p-6 h-full">
+                    <p class="text-xs font-bold uppercase tracking-wide text-slate-500 mb-2 m-0">Voie classique (entreprise)</p>
+                    <p class="text-slate-600 text-base leading-relaxed text-left m-0 copy-wide">L’entreprise <strong class="text-ink">aligne plusieurs contributeurs</strong> (produit, développement, infrastructure) et rédige le besoin au fil de l’eau. Chaque brique — météo, cours, parcelles, alertes — arrive sur la table quand elle devient urgente. C’est souvent <strong class="text-ink">long à cadrer</strong> et il faut beaucoup <strong class="text-ink">recoller les points de vue</strong> entre terrain, direction et informatique.</p>
                 </div>
-                <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Évolutions sans tout casser</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Services découpés (météo, marchés, parcelles, comptes…) : on peut <strong class="text-ink">changer un connecteur</strong> ou en ajouter un sans refaire toute l’application.</p>
                 </div>
-                <div class="rounded-xl border border-emerald-200 bg-brand-muted/40 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-2">Actif entre vos mains</p>
-                    <p class="text-sm text-slate-700 leading-relaxed m-0 text-left">Avec le <strong class="text-ink">code livré</strong>, la roadmap et la sécurité ne dépendent pas d’un prestataire unique sur la durée.</p>
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-emerald-100 bg-emerald-50/40 p-5 sm:p-6 h-full">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2 m-0">Voie dossier Veragrow</p>
+                    <p class="text-slate-700 text-base leading-relaxed text-left m-0 copy-wide"><strong class="text-ink">Ce dossier part</strong> d’un <strong class="text-ink">texte déjà écrit</strong> : mêmes priorités produit, mêmes questions d’intégration, même schéma technique. <strong class="text-ink">Tout le monde lit la même base</strong>, puis <strong class="text-ink">vous l’ajustez</strong> avec vos retours. <strong class="text-ink">J’exécute</strong> tout le <strong class="text-ink">code</strong>, les <strong class="text-ink">intégrations</strong> et les <strong class="text-ink">stores</strong> <strong class="text-ink">pour Veragrow</strong>, <strong class="text-ink">seul</strong> ; <strong class="text-ink">chez Veragrow</strong>, <strong class="text-ink">vous arbitrez</strong>, <strong class="text-ink">validez</strong> et <strong class="text-ink">testez</strong> — <strong class="text-ink">pas de dev à produire en interne chez vous</strong>.</p>
+                </div>
+                </div>
+            </div>
+            <div class="mt-10 grid gap-6 md:grid-cols-3">
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-slate-50/80 p-6 sm:p-8 shadow-sm h-full">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Un langage commun</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left copy-wide">Les <strong class="text-ink">must-have</strong>, le <strong class="text-ink">tableau des flux</strong> et la <strong class="text-ink">stack</strong> sont posés noir sur blanc : <strong class="text-ink">terrain, finance et direction</strong> lisent la même feuille de route — <strong class="text-ink">aucun</strong> de ces pôles <strong class="text-ink">n’a à produire le logiciel</strong>.</p>
+                </div>
+                </div>
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-slate-200 bg-slate-50/80 p-6 sm:p-8 shadow-sm h-full">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Des choix déjà cadrés</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left copy-wide">Les arbitrages classiques (où prendre la météo, comment afficher les cours, comment brancher les parcelles…) sont <strong class="text-ink">proposés et documentés par moi</strong> <strong class="text-ink">pour Veragrow</strong>. <strong class="text-ink">Vous</strong> dites <strong class="text-ink">oui, non ou ajuste</strong> sur ce qui vous engage — <strong class="text-ink">sans rédiger de specs techniques</strong> vous-mêmes.</p>
+                </div>
+                </div>
+                <div class="tilt-wrap" data-tilt>
+                <div class="tilt-surface rounded-xl border border-emerald-200 bg-brand-muted/40 p-6 sm:p-8 shadow-sm h-full">
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-2">Indépendance sur la durée</p>
+                    <p class="text-sm text-slate-700 leading-relaxed m-0 text-left copy-wide">La livraison vise le <strong class="text-ink">code source</strong> : vous gardez la maîtrise des évolutions, de l’hébergement et de la politique de sécurité, sans dépendre d’un seul interlocuteur technique pour toujours.</p>
+                </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- 5. Architecture & données -->
-    <section id="technique" class="py-16 sm:py-22 bg-ink text-slate-300 reveal-on-scroll scroll-mt-32 border-t border-white/10">
+    <section id="technique" class="py-20 sm:py-28 bg-ink text-slate-300 reveal-on-scroll scroll-mt-32 border-t border-white/10">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-emerald-400/90 mb-2">05 · Architecture &amp; données</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight max-w-3xl">Synthèse pour votre direction des systèmes d’information</h2>
-            <p class="mt-4 text-slate-400 text-sm sm:text-base max-w-3xl leading-relaxed">Les <strong class="text-slate-200">clients mobiles iOS et Android</strong> consomment une API backend commune ; le choix précis du framework mobile (<strong class="text-slate-200">natif Swift / Kotlin</strong> ou <strong class="text-slate-200">cross-platform</strong> type React Native, Flutter, etc.) se fixe au kick-off avec votre DSI. Vue d’ensemble des <strong class="text-slate-200">sources de données</strong> et des <strong class="text-slate-200">choix techniques</strong> illustratifs ci-dessous. Contrats fournisseurs, quotas d’API et conformité RGPD relèvent de votre cadrage.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight w-full max-w-none">Synthèse pour votre direction des systèmes d’information</h2>
+            <p class="mt-4 text-slate-400 text-sm sm:text-base w-full max-w-none copy-wide leading-relaxed">Les <strong class="text-slate-200">clients mobiles iOS et Android</strong> consomment une API backend commune ; le <strong class="text-slate-200">choix de framework</strong> mobile (<strong class="text-slate-200">natif Swift / Kotlin</strong> ou <strong class="text-slate-200">cross-platform</strong> type React Native, Flutter, etc.), <strong class="text-slate-200">je le tranche pour Veragrow</strong> dans mon travail d’implémentation. <strong class="text-slate-200">Veragrow</strong> n’est sollicitée que pour les <strong class="text-slate-200">décisions</strong> qui l’engagent (budget, risques, sensibilité des données, fournisseurs). Ci-dessous : <strong class="text-slate-200">sources</strong> et <strong class="text-slate-200">choix techniques</strong> que <strong class="text-slate-200">je propose pour le projet Veragrow</strong>. Contrats fournisseurs, quotas d’API et conformité RGPD : <strong class="text-slate-200">cadre à définir avec vous</strong>, <strong class="text-slate-200">sans travail d’implémentation</strong> de votre part.</p>
 
-            <div class="mt-8 rounded-xl border border-white/10 bg-white/[0.04] p-5 sm:p-6 max-w-4xl">
-                <p class="text-xs font-bold uppercase tracking-widest text-emerald-400/90 mb-2">APIs Veragrow — lecture fluide</p>
-                <p class="text-sm text-slate-300 leading-relaxed m-0">Chaque grand bloc à l’écran repose sur des <strong class="text-white">connecteurs documentés</strong> : <strong class="text-white">cartes</strong> (ex. Mapbox), analyse satellite (ex. Google Earth Engine), contours parcelles (ex. IGN / Géoportail), <strong class="text-white">végétation</strong> (Copernicus Sentinel-1/2), <strong class="text-white">météo</strong> (Météo-France API Agro, OpenWeatherMap, stations tierces type Sencrop / Weenat), <strong class="text-white">marchés</strong> (Euronext via passerelle type Commodities-API). Côté serveur, orchestration typique <strong class="text-white">Node.js</strong>, persistance <strong class="text-white">PostgreSQL</strong>, exposition à l’app mobile et éventuellement à une <strong class="text-white">console web</strong> — pour que <strong class="text-white">vos équipes</strong> puissent <strong class="text-white">remplacer ou étendre</strong> un connecteur sans refaire tout le produit.</p>
+            <div class="tilt-wrap mt-8" data-tilt>
+            <div class="tilt-surface w-full max-w-none rounded-xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
+                <p class="tilt-depth text-xs font-bold uppercase tracking-widest text-emerald-400/90 mb-2 m-0" data-tilt-depth="5">APIs Veragrow — lecture fluide</p>
+                <div class="tilt-depth mb-3 h-px w-full max-w-md bg-gradient-to-r from-emerald-500/50 to-transparent" data-tilt-depth="8" aria-hidden="true"></div>
+                <p class="tilt-depth text-sm text-slate-300 leading-relaxed m-0 copy-wide" data-tilt-depth="12">Chaque grand bloc à l’écran repose sur des <strong class="text-white">connecteurs documentés</strong> que <strong class="text-white">j’implémente pour Veragrow</strong> : <strong class="text-white">cartes</strong> (ex. Mapbox), analyse satellite (ex. Google Earth Engine), contours parcelles (ex. IGN / Géoportail), <strong class="text-white">végétation</strong> (Copernicus Sentinel-1/2), <strong class="text-white">météo</strong> (Météo-France API Agro, OpenWeatherMap, stations tierces type Sencrop / Weenat), <strong class="text-white">marchés</strong> (Euronext via passerelle type Commodities-API). Côté serveur, orchestration typique <strong class="text-white">Node.js</strong>, persistance <strong class="text-white">PostgreSQL</strong>, exposition à l’app mobile et éventuellement à une <strong class="text-white">console web</strong> — <strong class="text-white">tout est codé par moi pour le compte de Veragrow</strong> ; <strong class="text-white">après livraison</strong>, <strong class="text-white">Veragrow</strong> peut confier l’évolution à <strong class="text-white">qui elle veut</strong>,                 le code restant structuré pour ça.</p>
+            </div>
             </div>
 
             <div class="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
                 <div>
                     <h3 class="text-lg font-bold text-white tracking-tight">Sources &amp; connecteurs</h3>
-                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Chaque encadré ci-dessous correspond à un <strong class="text-slate-200">type de donnée</strong> (carte, satellite, météo, cours…). Ce sont des <strong class="text-slate-200">exemples</strong> : au moment où le projet démarre, on repasse la liste avec votre <strong class="text-slate-200">équipe informatique</strong> pour trancher ce qui est branché en réel, dans quel ordre, et avec quels fournisseurs.</p>
+                    <p class="mt-2 text-sm text-slate-400 leading-relaxed copy-wide">Chaque encadré ci-dessous correspond à un <strong class="text-slate-200">type de donnée</strong> (carte, satellite, météo, cours…). Ce sont des <strong class="text-slate-200">exemples</strong> : en <strong class="text-slate-200">atelier</strong>, <strong class="text-slate-200">je</strong> les <strong class="text-slate-200">aligne avec vous</strong> sur le <strong class="text-slate-200">métier</strong> et l’<strong class="text-slate-200">engagement</strong> ; <strong class="text-slate-200">j’implémente et je branche</strong> <strong class="text-slate-200">pour Veragrow</strong> — <strong class="text-slate-200">sans charge dev</strong> de votre côté.</p>
                     <div class="mt-6 grid gap-3 sm:grid-cols-2">
                         <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
                             <p class="text-sm font-bold text-white m-0">Cartographie &amp; parcelles</p>
@@ -602,7 +701,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-white tracking-tight">Stack &amp; exploitation</h3>
-                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Le <strong class="text-slate-200">serveur</strong> (logique métier) tourne en <strong class="text-slate-200">Node.js</strong> ; les données structurées sont stockées dans <strong class="text-slate-200">PostgreSQL</strong>. Les applis <strong class="text-slate-200">iPhone</strong> et <strong class="text-slate-200">Android</strong> parlent toutes les deux au <strong class="text-slate-200">même backend</strong> via la même <strong class="text-slate-200">API</strong> — une logique centrale, deux publications (App Store et Play Store). Pour les écrans mobiles, on peut viser du <strong class="text-slate-200">100 % natif</strong> (Swift / Kotlin) ou du <strong class="text-slate-200">multi-plateforme</strong> (souvent autour de <strong class="text-slate-200">React</strong>, par ex. React Native) : ce choix se fait avec votre <strong class="text-slate-200">équipe informatique</strong> au lancement.</p>
+                    <p class="mt-2 text-sm text-slate-400 leading-relaxed copy-wide">Le <strong class="text-slate-200">serveur</strong> (logique métier) tourne en <strong class="text-slate-200">Node.js</strong> ; les données structurées sont stockées dans <strong class="text-slate-200">PostgreSQL</strong>. Les applis <strong class="text-slate-200">iPhone</strong> et <strong class="text-slate-200">Android</strong> parlent toutes les deux au <strong class="text-slate-200">même backend</strong> via la même <strong class="text-slate-200">API</strong> — une logique centrale, deux publications (App Store et Play Store). Pour les écrans mobiles, <strong class="text-slate-200">je</strong> peux viser du <strong class="text-slate-200">100 % natif</strong> (Swift / Kotlin) ou du <strong class="text-slate-200">multi-plateforme</strong> (souvent autour de <strong class="text-slate-200">React</strong>, par ex. React Native) <strong class="text-slate-200">pour Veragrow</strong> : <strong class="text-slate-200">je</strong> tranche ce choix ; <strong class="text-slate-200">vous</strong> êtes <strong class="text-slate-200">informés</strong> si une option a un impact sur votre <strong class="text-slate-200">risque</strong> ou vos <strong class="text-slate-200">contrats</strong>.</p>
                     <ul class="mt-6 space-y-3 text-sm text-slate-300">
                         <li class="flex gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
                             <span class="text-emerald-400 font-bold shrink-0">·</span>
@@ -617,7 +716,7 @@
                             <span><strong class="text-white">Architecture modulaire</strong> : services découplés (authentification, parcelles, météo, marchés, notifications) pour scaler et maintenir par domaine.</span>
                         </li>
                     </ul>
-                    <p class="mt-6 text-xs text-slate-500 leading-relaxed border-t border-white/10 pt-4 m-0">Engagements d’ingénierie cibles : couverture de tests &gt; 80 % sur le cœur critique, spécification OpenAPI (Swagger), README de déploiement, principes SOLID et architecture en couches — détails à contractualiser avec votre DSI.</p>
+                    <p class="mt-6 text-xs text-slate-500 leading-relaxed border-t border-white/10 pt-4 m-0">Engagements d’ingénierie cibles : couverture de tests &gt; 80 % sur le cœur critique, spécification OpenAPI (Swagger), README de déploiement, principes SOLID et architecture en couches — <strong class="text-slate-400">je porte ce périmètre technique pour Veragrow</strong> ; <strong class="text-slate-400">la direction Veragrow</strong> ne <strong class="text-slate-400">signe</strong> que ce qui l’engage (budget, risques, hébergement…).</p>
                 </div>
             </div>
         </div>
@@ -626,9 +725,12 @@
     <footer class="border-t border-slate-200 bg-white py-10 reveal-on-scroll">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <div class="flex flex-col sm:flex-row items-start justify-between gap-6">
-                <div class="text-center sm:text-left max-w-xl">
+                <div class="text-center sm:text-left w-full max-w-none sm:flex-1 flex flex-col sm:flex-row items-center sm:items-start gap-3">
+                    <img src="Logo-Veragrow-Opti%20(1).webp" alt="" width="120" height="120" class="h-9 w-auto shrink-0 object-contain opacity-90" decoding="async">
+                    <div>
                     <p class="text-sm font-semibold tracking-tight text-ink">Veragrow — dossier confidentiel</p>
                     <p class="text-xs text-slate-500 mt-1 leading-relaxed m-0">Diffusion réservée au cercle prévu. Contenu de travail — ne pas diffuser.</p>
+                    </div>
                 </div>
                 <p class="text-xs text-slate-400 text-center sm:text-right shrink-0 max-w-xs sm:max-w-[220px]">Toute reproduction ou diffusion hors cadre convenu est interdite.</p>
             </div>
@@ -637,61 +739,87 @@
     </footer>
 
     <script>
-        (function () {
-            var bar = document.getElementById('scroll-progress-bar');
-            var track = document.getElementById('scroll-progress-track');
-            var header = document.getElementById('site-header');
-            var curtain = document.getElementById('boot-curtain');
-            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+(function () {
+var bar = document.getElementById('scroll-progress-bar');
+var track = document.getElementById('scroll-progress-track');
+var hdr = document.getElementById('site-header');
+var splash = document.getElementById('boot-curtain');
+var noAnim = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-            function onScroll() {
-                var el = document.documentElement;
-                var max = el.scrollHeight - el.clientHeight;
-                var pct = max > 0 ? Math.round((el.scrollTop / max) * 100) : 0;
-                if (bar) bar.style.width = pct + '%';
-                if (track) track.setAttribute('aria-valuenow', String(pct));
-                if (header) {
-                    if (el.scrollTop > 12) header.classList.add('is-scrolled');
-                    else header.classList.remove('is-scrolled');
-                }
-            }
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
+function scrollStuff() {
+  var root = document.documentElement;
+  var h = root.scrollHeight - root.clientHeight;
+  var p = h > 0 ? Math.round((root.scrollTop / h) * 100) : 0;
+  if (bar) bar.style.width = p + '%';
+  if (track) track.setAttribute('aria-valuenow', String(p));
+  if (hdr) {
+    if (root.scrollTop > 12) hdr.classList.add('is-scrolled');
+    else hdr.classList.remove('is-scrolled');
+  }
+}
+window.addEventListener('scroll', scrollStuff, { passive: true });
+scrollStuff();
 
-            function finishBoot() {
-                document.body.classList.add('is-ready');
-                if (curtain) {
-                    curtain.classList.add('is-hidden');
-                    curtain.addEventListener('transitionend', function once() {
-                        curtain.removeEventListener('transitionend', once);
-                        curtain.setAttribute('aria-hidden', 'true');
-                    });
-                }
-            }
+function go() {
+  document.body.classList.add('is-ready');
+  if (!splash) return;
+  splash.classList.add('is-hidden');
+  splash.addEventListener('transitionend', function end() {
+    splash.removeEventListener('transitionend', end);
+    splash.setAttribute('aria-hidden', 'true');
+  });
+}
+if (noAnim) go();
+else requestAnimationFrame(function () { requestAnimationFrame(function () { setTimeout(go, 40); }); });
 
-            if (reduceMotion) {
-                finishBoot();
-            } else {
-                requestAnimationFrame(function () {
-                    requestAnimationFrame(function () {
-                        setTimeout(finishBoot, 40);
-                    });
-                });
-            }
+if (!noAnim) {
+  var obs = new IntersectionObserver(function (ents) {
+    for (var i = 0; i < ents.length; i++) {
+      var e = ents[i];
+      if (!e.isIntersecting) continue;
+      e.target.classList.add('reveal-visible');
+      obs.unobserve(e.target);
+    }
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  var blocks = document.querySelectorAll('.reveal-on-scroll');
+  for (var j = 0; j < blocks.length; j++) obs.observe(blocks[j]);
+}
 
-            if (reduceMotion) return;
-            var nodes = document.querySelectorAll('.reveal-on-scroll');
-            var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) {
-                    if (!e.isIntersecting) return;
-                    e.target.classList.add('reveal-visible');
-                    if (e.target.getAttribute('data-reveal-once') !== 'false') {
-                        io.unobserve(e.target);
-                    }
-                });
-            }, { rootMargin: '0px 0px -6% 0px', threshold: 0.07 });
-            nodes.forEach(function (n) { io.observe(n); });
-        })();
+function initTilt() {
+  if (noAnim) return;
+  var wraps = document.querySelectorAll('[data-tilt]');
+  for (var w = 0; w < wraps.length; w++) {
+    (function (wrap) {
+      var surf = wrap.querySelector('.tilt-surface');
+      if (!surf) return;
+      var depths = wrap.querySelectorAll('[data-tilt-depth]');
+      function onMove(ev) {
+        var r = wrap.getBoundingClientRect();
+        var px = (ev.clientX - r.left) / r.width - 0.5;
+        var py = (ev.clientY - r.top) / r.height - 0.5;
+        var cap = 6.5;
+        var rx = -py * 2 * cap;
+        var ry = px * 2 * cap;
+        surf.style.transform = 'rotateX(' + rx + 'deg) rotateY(' + ry + 'deg)';
+        for (var d = 0; d < depths.length; d++) {
+          var el = depths[d];
+          var k = parseFloat(el.getAttribute('data-tilt-depth'));
+          if (isNaN(k)) k = 0;
+          var f = 0.5;
+          el.style.transform = 'translate3d(' + (px * k * f) + 'px,' + (py * k * f) + 'px,0)';
+        }
+      }
+      function onLeave() {
+        surf.style.transform = '';
+        for (var d = 0; d < depths.length; d++) depths[d].style.transform = '';
+      }
+      wrap.addEventListener('mousemove', onMove);
+      wrap.addEventListener('mouseleave', onLeave);
+    })(wraps[w]);
+  }
+}
+initTilt();
+})();
     </script>
 </body>
 </html>
