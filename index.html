@@ -204,7 +204,7 @@
         }
     </style>
 </head>
-<body class="bg-white text-slate-800 antialiased font-sans text-[15px] leading-relaxed">
+<body class="bg-white text-slate-800 antialiased font-sans text-[15px] leading-relaxed text-left">
     <div id="boot-curtain" class="fixed inset-0 z-[150] bg-white" aria-hidden="true"></div>
 
     <!-- Bannière exclusivité + barre de progression -->
@@ -214,7 +214,7 @@
             <span class="text-white/40"> · </span>
             <span class="text-slate-300">diffusion restreinte</span>
             <span class="text-white/50 hidden sm:inline"> · </span>
-            <span class="text-slate-400 hidden sm:inline">pas de chiffrage dans ce dossier</span>
+            <span class="text-slate-400 hidden sm:inline">ne pas diffuser</span>
         </div>
         <div class="h-[3px] w-full bg-slate-200/90" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="scroll-progress-track">
             <div id="scroll-progress-bar" class="h-full w-0 rounded-r-full"></div>
@@ -237,7 +237,6 @@
                     <a href="#probleme" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Vision</a>
                     <a href="#marche" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">APIs &amp; marché</a>
                     <a href="#solution" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Livrable</a>
-                    <a href="#calendrier" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Calendrier</a>
                     <a href="#produit" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Démonstration</a>
                     <a href="#fonctions" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Fonctionnalités</a>
                     <a href="#compare" class="nav-link rounded-xl px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50/80 hover:text-brand">Positionnement</a>
@@ -252,7 +251,6 @@
                         <a href="#probleme" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Vision</a>
                         <a href="#marche" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">APIs &amp; marché</a>
                         <a href="#solution" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Livrable</a>
-                        <a href="#calendrier" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Calendrier</a>
                         <a href="#produit" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Démonstration</a>
                         <a href="#fonctions" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Fonctionnalités</a>
                         <a href="#compare" class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Positionnement</a>
@@ -276,10 +274,7 @@
                     Veragrow : l’app mobile, les données et les intégrations
                 </h1>
                 <p class="hero-animate-in mt-6 text-base sm:text-lg text-slate-300 leading-relaxed font-medium" style="animation-delay: 0.26s">
-                    Vous y trouvez la vision de l’<strong class="text-white font-semibold">application Veragrow</strong> sur <strong class="text-white font-semibold">iOS et Android</strong>, avec le <strong class="text-white font-semibold">socle serveur</strong> (API, authentification, persistance). Une grande table fait le tour des <strong class="text-white font-semibold">flux et intégrations</strong> côté marché et de ce que Veragrow peut enchaîner de façon réaliste. Tant qu’aucun <strong class="text-white font-semibold">accord écrit</strong> n’intervient, ce texte ne fixe ni prix ni calendrier ni obligation.
-                </p>
-                <p class="hero-animate-in mt-4 text-sm text-slate-400 leading-relaxed max-w-xl" style="animation-delay: 0.34s">
-                    Le <strong class="text-white">chiffrage</strong>, les <strong class="text-white">contacts</strong> et le <strong class="text-white">planning détaillé</strong> se traitent en dehors de ce dossier, en réunion ou sur documents dédiés.
+                    Vous y trouvez la vision de l’<strong class="text-white font-semibold">application Veragrow</strong> sur <strong class="text-white font-semibold">iOS et Android</strong>, avec le <strong class="text-white font-semibold">socle serveur</strong> (API, authentification, persistance), puis une <strong class="text-white font-semibold">grande table</strong> qui parcourt les <strong class="text-white font-semibold">flux et intégrations</strong> du marché et ce que Veragrow peut enchaîner de façon réaliste.
                 </p>
                 <div class="hero-animate-in mt-8 flex flex-wrap gap-3" style="animation-delay: 0.42s">
                     <a href="#probleme" class="inline-flex items-center justify-center rounded-xl bg-white px-5 py-3 text-sm font-semibold text-brand shadow-md shadow-black/10 hover:bg-brand-muted hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 ease-out">La vision</a>
@@ -356,8 +351,8 @@
 
     <div class="border-b border-slate-200/90 bg-gradient-to-b from-slate-50 to-white reveal-on-scroll">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 py-3.5">
-            <p class="text-center text-xs sm:text-sm font-medium text-slate-600 tracking-tight">
-                <span class="text-ink font-semibold">En deux phrases</span> — <strong class="text-ink">Veragrow</strong> est une application mobile <strong class="text-ink">iOS &amp; Android</strong> qui unifie parcelles (RPG), météo ultra-locale, marchés Euronext et alertes d’aide à la décision, avec <strong class="text-ink">backend, authentification, code et déploiement stores</strong>. Les pages suivantes détaillent le <strong class="text-ink">comparatif d’intégrations</strong> et la stack ; <strong class="text-ink">montants et échéancier</strong> ne sont pas abordés ici.
+            <p class="text-left text-xs sm:text-sm font-medium text-slate-600 tracking-tight max-w-4xl">
+                <span class="text-ink font-semibold">À retenir</span> — <strong class="text-ink">Veragrow</strong> est une application mobile <strong class="text-ink">iOS &amp; Android</strong> qui unifie parcelles (RPG), météo ultra-locale, marchés Euronext et alertes d’aide à la décision, avec <strong class="text-ink">backend, authentification, code et déploiement stores</strong>. La suite du dossier détaille le <strong class="text-ink">comparatif d’intégrations</strong> et la stack technique.
             </p>
         </div>
     </div>
@@ -491,24 +486,16 @@
                 L’offre décrite ici porte sur une <strong class="text-ink">application mobile Veragrow</strong> pour <strong class="text-ink">iOS</strong> et <strong class="text-ink">Android</strong>, avec l’ensemble du <strong class="text-ink">système</strong> derrière : création et gestion des <strong class="text-ink">comptes / tokens</strong> (authentification), <strong class="text-ink">API et backend</strong>, bases de données, dépôts de <strong class="text-ink">code source</strong>, chaîne de build, et accompagnement pour les <strong class="text-ink">publications App Store &amp; Google Play</strong> (comptes développeur, fiches store, conformité des binaires — détails à contractualiser). Vous reprenez un <strong class="text-ink">actif complet</strong>, pas un simple exécutable sans clef.
             </p>
 
-            <div id="calendrier" class="mt-8 scroll-mt-32 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-                <p class="text-[10px] font-bold uppercase tracking-widest text-slate-500 mb-2">Calendrier</p>
-                <h3 class="text-lg font-bold text-ink tracking-tight">À confirmer ensemble</h3>
-                <p class="mt-3 text-sm text-slate-600 leading-relaxed m-0">Les <strong class="text-ink">dates de démarrage</strong>, la <strong class="text-ink">durée</strong> des phases de développement et de recette, ainsi qu’une éventuelle <strong class="text-ink">échéance événementielle</strong> (ex. salon agricole) ne sont <strong class="text-ink">pas arrêtées ici</strong> : elles se décident une fois le périmètre validé ensemble. Rien dans ce dossier n’impose de date à lui seul.</p>
-            </div>
+            <p id="calendrier" class="mt-8 scroll-mt-32 text-sm text-slate-600 leading-relaxed max-w-3xl text-left m-0">Les <strong class="text-ink">étapes</strong> — cadrage, développement, recette, mise en ligne — et leur <strong class="text-ink">durée</strong> se calent avec vous au fil du projet, au rythme des arbitrages.</p>
 
-            <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="mt-10 grid sm:grid-cols-2 gap-4 max-w-3xl">
                 <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Souveraineté &amp; IP</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0">La <strong class="text-ink">cession du code source</strong> reste l’argument structurant : <strong class="text-ink">vous possédez l’actif</strong> et maîtrisez hébergement, évolutions et politique de sécurité.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Le transfert du <strong class="text-ink">code source</strong> vous donne la <strong class="text-ink">propriété de l’actif</strong> : hébergement, évolutions et sécurité restent sous votre responsabilité.</p>
                 </div>
                 <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
                     <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Périmètre technique</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0">Mobile <strong class="text-ink">natif ou cross-platform</strong> (choix à figer au kick-off), <strong class="text-ink">API REST</strong>, persistance, intégrations données — voir section <strong class="text-ink">Architecture</strong>.</p>
-                </div>
-                <div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:col-span-2 lg:col-span-1">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Cadre de lecture</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0">Les <strong class="text-ink">prix</strong> et les <strong class="text-ink">coordonnées</strong> ne font pas partie de ce dossier : ils se traitent en direct lorsque vous le souhaitez.</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Mobile <strong class="text-ink">natif ou cross-platform</strong> (choix au lancement avec la DSI), <strong class="text-ink">API REST</strong>, persistance, intégrations — détail en section <strong class="text-ink">Architecture</strong>.</p>
                 </div>
             </div>
         </div>
@@ -519,33 +506,37 @@
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">03 · Must-have produit</p>
             <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Ce qui apporte de la valeur immédiate à l’agriculteur</h2>
-            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed">Priorisation du <strong class="text-ink">cœur métier</strong> : une seule app pour éviter d’en ouvrir trois pour lire l’état des champs, la météo du terrain et les cours. Les formulations sur l’<strong class="text-ink">IA</strong> restent volontairement <strong class="text-ink">prudentes</strong> : indications et alertes en <strong class="text-ink">aide à la décision</strong>, jamais comme prescription agronomique définitive.</p>
+            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed text-left">Priorisation du <strong class="text-ink">cœur métier</strong> : une seule app pour éviter d’en ouvrir une <strong class="text-ink">demi-douzaine</strong> pour lire l’état des champs, la météo du terrain et les cours. Sur l’<strong class="text-ink">IA</strong>, on reste sur des <strong class="text-ink">indications et alertes</strong> en aide à la décision, pas sur des prescriptions agronomiques figées.</p>
 
             <div class="mt-10 grid gap-4 sm:grid-cols-2">
                 <article class="rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-white to-emerald-50/50 p-5 sm:p-6 shadow-sm sm:col-span-2">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">1 · Priorité maximale</span>
-                    <h3 class="mt-3 text-lg font-bold tracking-tight text-ink">Vue parcelle unifiée (le cœur)</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0"><strong class="text-ink">Une carte</strong> pour toutes les parcelles, avec import depuis le <strong class="text-ink">RPG</strong> lorsque c’est pertinent. <strong class="text-ink">Code couleur simple</strong> pour l’état de la végétation : lecture immédiate sans basculer entre plusieurs outils.</p>
+                    <h3 class="mt-3 text-lg font-bold tracking-tight text-ink text-left">Vue parcelle unifiée (le cœur)</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left"><strong class="text-ink">Une carte</strong> pour toutes les parcelles, avec import depuis le <strong class="text-ink">RPG</strong> lorsque c’est pertinent. <strong class="text-ink">Code couleur simple</strong> pour l’état de la végétation : lecture immédiate sans jongler entre une <strong class="text-ink">demi-douzaine</strong> d’apps ou d’onglets.</p>
                 </article>
                 <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">2 · Critique</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Météo agricole ultra-locale</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0">Pas la météo « ville » : celle du <strong class="text-ink">champ</strong>. <strong class="text-ink">Cumuls de pluie</strong>, <strong class="text-ink">évapotranspiration (ETP)</strong> et <strong class="text-ink">fenêtres de traitement</strong> (vent, température) pour savoir quand sortir le pulvérisateur ou semer.</p>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">Pas la météo « ville » : celle du <strong class="text-ink">champ</strong>. <strong class="text-ink">Cumuls de pluie</strong>, <strong class="text-ink">évapotranspiration (ETP)</strong> et <strong class="text-ink">fenêtres de traitement</strong> (vent, température) pour savoir quand sortir le pulvérisateur ou semer.</p>
                 </article>
                 <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
                     <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">3 · Haute (business)</span>
                     <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Tableau de bord des marchés (Euronext)</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0">L’agriculteur est chef d’entreprise : <strong class="text-ink">blé, colza, maïs</strong> en flux utile sur l’<strong class="text-ink">écran d’accueil</strong>, pour arbitrer la vente de récolte sans ouvrir un site boursier à part.</p>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">L’agriculteur est chef d’entreprise : <strong class="text-ink">blé, colza, maïs</strong> en flux utile sur l’<strong class="text-ink">écran d’accueil</strong>, pour arbitrer la vente de récolte sans ouvrir un site boursier à part.</p>
                 </article>
                 <article class="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm sm:col-span-2">
-                    <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">4 · Moyenne (aide à la décision)</span>
-                    <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Moteur d’alertes (dont signaux IA)</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0">Notifications courtes qui <strong class="text-ink">traduisent la donnée en action</strong>, par ex. : <em>« Risque de maladie sur la parcelle B3 — météo favorable au mildiou »</em>. L’objectif est l’<strong class="text-ink">aide à la décision</strong> ; le cadre juridique et les formulations exactes restent à valider avec vos juristes.</p>
+                    <span class="inline-flex rounded-lg bg-brand px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">4 · Alertes intelligentes</span>
+                    <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Des push utiles, pas du bruit</h3>
+                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0 text-left">L’app envoie des <strong class="text-ink">messages courts</strong> quand un indicateur dépasse un seuil utile au terrain. Exemple : <em>« Parcelle B3 — conditions propices au mildiou »</em>. L’agriculteur garde la main : ce sont des <strong class="text-ink">signaux pour réfléchir</strong>, pas des ordres de traitement.</p>
                 </article>
                 <article class="rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm sm:col-span-2">
-                    <span class="inline-flex rounded-lg bg-ink px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">5 · Stratégique (contrat)</span>
-                    <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Cession du code source</h3>
-                    <p class="mt-2 text-sm text-slate-600 leading-relaxed m-0">Ce n’est pas un écran dans l’app, mais un <strong class="text-ink">point clé pour la suite</strong> : vous achetez un <strong class="text-ink">actif que vous possédez</strong> — souveraineté numérique, hébergement et évolutions sous votre contrôle. Les modalités de transfert et de garantie se négocient dans le <strong class="text-ink">contrat</strong>, pas dans ce dossier.</p>
+                    <span class="inline-flex rounded-lg bg-ink px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-white">5 · Vous gardez le produit</span>
+                    <h3 class="mt-3 text-base font-bold tracking-tight text-ink">Le code source vous est transféré</h3>
+                    <div class="mt-3 space-y-2.5 text-sm text-slate-600 leading-relaxed text-left">
+                        <p class="m-0">Vous ne recevez pas seulement une app à installer sur le store : vous recevez le <strong class="text-ink">code</strong>, la <strong class="text-ink">configuration serveur</strong> et la <strong class="text-ink">documentation</strong> qui vont avec.</p>
+                        <p class="m-0">Votre équipe (ou un autre prestataire) peut <strong class="text-ink">corriger, faire évoluer et sécuriser</strong> le système sans repartir de zéro.</p>
+                        <p class="m-0">En clair : pas de <strong class="text-ink">boîte noire</strong> — vous restez maître de l’outil après la livraison.</p>
+                    </div>
                 </article>
             </div>
         </div>
@@ -555,20 +546,20 @@
     <section id="compare" class="py-16 sm:py-22 bg-white border-t border-slate-200 reveal-on-scroll scroll-mt-32">
         <div class="max-w-6xl mx-auto px-4 sm:px-6">
             <p class="text-[11px] font-bold uppercase tracking-widest text-brand mb-2">04 · Positionnement</p>
-            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Reprise d’actif vs. développement interne</h2>
-            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed">Ce texte sert à <strong class="text-ink">cadrer la discussion</strong> : il ne remplace pas un devis ni un contrat, et ne crée pas d’engagement tant qu’un <strong class="text-ink">accord écrit</strong> n’existe pas. L’enjeu stratégique est de comparer un <strong class="text-ink">socle déjà décrit</strong> (fonctionnel, APIs, architecture) à un développement entièrement interne — souvent plus long et plus risqué si le périmètre reste flou au départ.</p>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-ink leading-tight max-w-3xl">Partir d’un socle décrit ou tout reconstruire en interne</h2>
+            <p class="mt-4 text-slate-600 text-base max-w-3xl leading-relaxed text-left">Ce dossier rassemble la <strong class="text-ink">même photographie</strong> pour le métier, la technique et la finance : fonctions indispensables, tableau des intégrations, architecture cible. L’alternative, c’est l’historique classique — cahier des charges qui grossit, recrutements, premières livraisons tardives. Ici l’objectif est simple : <strong class="text-ink">donner un repère commun</strong> pour décider vite si Veragrow correspond à votre trajectoire.</p>
             <div class="mt-10 grid gap-4 md:grid-cols-3">
                 <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Time-to-value</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0">Un livrable structuré (must-have produit, comparatif APIs, stack) pour accélérer la mise en route une fois le go donné — <strong class="text-ink">durées et jalons</strong> à fixer ensuite, hors de ce dossier.</p>
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Démarrage plus lisible</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Must-have produit, comparatif des flux et stack déjà posés : moins de zones grises au moment où l’on attaque le chantier.</p>
                 </div>
                 <div class="rounded-xl border border-slate-200 bg-slate-50/80 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Fiabilité &amp; TMA</p>
-                    <p class="text-sm text-slate-600 leading-relaxed m-0">Architecture modulaire pour <strong class="text-ink">intégrer et faire évoluer</strong> les connecteurs sans refonte globale systématique.</p>
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand mb-2">Évolutions sans tout casser</p>
+                    <p class="text-sm text-slate-600 leading-relaxed m-0 text-left">Services découpés (météo, marchés, parcelles, comptes…) : on peut <strong class="text-ink">changer un connecteur</strong> ou en ajouter un sans refaire toute l’application.</p>
                 </div>
                 <div class="rounded-xl border border-emerald-200 bg-brand-muted/40 p-6 shadow-sm">
-                    <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-2">Maîtrise de l’actif</p>
-                    <p class="text-sm text-slate-700 leading-relaxed m-0"><strong class="text-ink">Cession du code source</strong> visée : propriété intellectuelle et politique de sécurité sous votre contrôle — modalités à définir si vous souhaitez aller plus loin.</p>
+                    <p class="text-xs font-bold uppercase tracking-wide text-brand-dark mb-2">Actif entre vos mains</p>
+                    <p class="text-sm text-slate-700 leading-relaxed m-0 text-left">Avec le <strong class="text-ink">code livré</strong>, la roadmap et la sécurité ne dépendent pas d’un prestataire unique sur la durée.</p>
                 </div>
             </div>
         </div>
@@ -589,7 +580,7 @@
             <div class="mt-12 grid gap-10 lg:grid-cols-2 lg:gap-14">
                 <div>
                     <h3 class="text-lg font-bold text-white tracking-tight">Sources &amp; connecteurs</h3>
-                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Les briques suivantes illustrent le périmètre d’intégration prévu ; la liste exacte et les modalités contractuelles seront <strong class="text-slate-200">figées avec votre DSI</strong>.</p>
+                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Chaque encadré ci-dessous correspond à un <strong class="text-slate-200">type de donnée</strong> (carte, satellite, météo, cours…). Ce sont des <strong class="text-slate-200">exemples</strong> : au moment où le projet démarre, on repasse la liste avec votre <strong class="text-slate-200">équipe informatique</strong> pour trancher ce qui est branché en réel, dans quel ordre, et avec quels fournisseurs.</p>
                     <div class="mt-6 grid gap-3 sm:grid-cols-2">
                         <div class="rounded-xl border border-white/10 bg-white/[0.04] p-4">
                             <p class="text-sm font-bold text-white m-0">Cartographie &amp; parcelles</p>
@@ -611,7 +602,7 @@
                 </div>
                 <div>
                     <h3 class="text-lg font-bold text-white tracking-tight">Stack &amp; exploitation</h3>
-                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Backend <strong class="text-slate-200">Node.js</strong>, base <strong class="text-slate-200">PostgreSQL</strong> ; côté client, <strong class="text-slate-200">deux apps store</strong> (Apple / Google) branchées sur la même API. Si l’on retient une approche web partagée, <strong class="text-slate-200">React</strong> peut servir de socle (ex. React Native) — à trancher avec votre DSI.</p>
+                    <p class="mt-2 text-sm text-slate-400 leading-relaxed">Le <strong class="text-slate-200">serveur</strong> (logique métier) tourne en <strong class="text-slate-200">Node.js</strong> ; les données structurées sont stockées dans <strong class="text-slate-200">PostgreSQL</strong>. Les applis <strong class="text-slate-200">iPhone</strong> et <strong class="text-slate-200">Android</strong> parlent toutes les deux au <strong class="text-slate-200">même backend</strong> via la même <strong class="text-slate-200">API</strong> — une logique centrale, deux publications (App Store et Play Store). Pour les écrans mobiles, on peut viser du <strong class="text-slate-200">100 % natif</strong> (Swift / Kotlin) ou du <strong class="text-slate-200">multi-plateforme</strong> (souvent autour de <strong class="text-slate-200">React</strong>, par ex. React Native) : ce choix se fait avec votre <strong class="text-slate-200">équipe informatique</strong> au lancement.</p>
                     <ul class="mt-6 space-y-3 text-sm text-slate-300">
                         <li class="flex gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
                             <span class="text-emerald-400 font-bold shrink-0">·</span>
@@ -637,8 +628,7 @@
             <div class="flex flex-col sm:flex-row items-start justify-between gap-6">
                 <div class="text-center sm:text-left max-w-xl">
                     <p class="text-sm font-semibold tracking-tight text-ink">Veragrow — dossier confidentiel</p>
-                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">Ne pas diffuser hors du cercle prévu. Aucune adresse ni numéro n’y figure : les échanges directs reprennent sur d’autres canaux.</p>
-                    <p class="text-xs text-slate-500 mt-2 leading-relaxed m-0">Texte <strong class="text-slate-600">indicatif</strong> : il ne remplace pas une offre commerciale ou un contrat et ne crée pas d’obligation tant qu’un <strong class="text-slate-600">accord distinct</strong> n’est pas signé.</p>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed m-0">Diffusion réservée au cercle prévu. Contenu de travail — ne pas diffuser.</p>
                 </div>
                 <p class="text-xs text-slate-400 text-center sm:text-right shrink-0 max-w-xs sm:max-w-[220px]">Toute reproduction ou diffusion hors cadre convenu est interdite.</p>
             </div>
@@ -705,3 +695,4 @@
     </script>
 </body>
 </html>
+
